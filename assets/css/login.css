@@ -1,0 +1,21 @@
+.mainDiv {
+  position: relative;
+  background-color: #e6e6e6 !important;
+  border-radius: 20px !important;
+  padding: 5vh 3vw;
+  top: 50vh;
+  -webkit-transform: translate(0, -50%);
+          transform: translate(0, -50%);
+  -webkit-box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+          box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+label {
+  font-size: 1.2em;
+}
+
+button[type=submit] {
+  font-size: 1.2em;
+  margin-top: 2vh;
+}
+/*# sourceMappingURL=login.css.map */

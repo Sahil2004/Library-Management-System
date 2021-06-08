@@ -1,0 +1,17 @@
+.mainDiv {
+    position: relative;
+    background-color: rgb(230, 230, 230) !important;
+    border-radius: 20px !important;
+    padding: 5vh 3vw;
+    top: 50vh;
+    transform: translate(0, -50%);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+label {
+    font-size: 1.2em;
+}
+
+button[type=submit] {
+    font-size: 1.2em;
+    margin-top: 2vh;
+}
