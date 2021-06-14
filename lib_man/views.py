@@ -13,7 +13,7 @@ def lib_search(request):
     return render(request, 'lib_man/library_search.html', context)
 
 def dashboard(request):
-    return HttpResponse("<div>Dashboard</div>")
+    return render(request, 'lib_man/dashboard.html')
 
 def books(request):
     context = {
