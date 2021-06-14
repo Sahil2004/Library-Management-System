@@ -1,16 +1,6 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Search</title>
-    <link rel="stylesheet" defer href="{% static 'lib_man/bootstrap-5.0.1-dist/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'lib_man/css/login.css' %}">
-    <script defer src="{% static 'lib_man/bootstrap-5.0.1-dist/js/bootstrap.bundle.min.js' %}"></script>
-</head>
-<body class="bg-light container-fluid">
+{% extends 'lib_man/components/headerAndFooter.html' %}
+    
+{% block headerAndFooter %}
     <div class="input-group mt-5 mb-5 w-50 mx-auto">
         <input type="text" class="form-control" placeholder="Search" aria-label="Search"aria-describedby="basic-addon2" autofocus tabindex="1">
         <div class="input-group-append">
@@ -33,5 +23,4 @@
             </div>
           </div>
     </div>
-</body>
-</html>
+{% endblock %}
