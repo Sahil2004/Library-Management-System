@@ -10,7 +10,7 @@ def lib_search(request):
     context = {
         'books': Book.objects.all()
     }
-    return HttpResponse("<div>Library Search</div>", context)
+    return render(request, 'lib_man/library_search.html', context)
 
 def dashboard(request):
     return HttpResponse("<div>Dashboard</div>")
