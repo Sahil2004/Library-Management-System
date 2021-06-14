@@ -1,23 +1,31 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Book
+from .models import Borrower
 
 def login(request):
     return render(request, 'lib_man/login.html')
 
 def lib_search(request):
-    return HttpResponse("<div>Library Search</div>")
-
-def portal(request):
-    return HttpResponse("<div>Portal</div>")
+    context = {
+        'books': Book.objects.all()
+    }
+    return HttpResponse("<div>Library Search</div>", context)
 
 def dashboard(request):
     return HttpResponse("<div>Dashboard</div>")
 
 def books(request):
-    return HttpResponse("<div>Books</div>")
+    context = {
+        'books': Book.objects.all()
+    }
+    return HttpResponse("<div>Books</div>", context)
     
 def borrowers(request):
-    return HttpResponse("<div>Borrowers</div>")
+    context = {
+        'borrowers': Borrower.objects.all()
+    }
+    return HttpResponse("<div>Borrowers</div>", context)
 
 def borrowed_books(request):
     return HttpResponse("<div>Borrowers</div>")
