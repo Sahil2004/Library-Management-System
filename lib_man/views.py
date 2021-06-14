@@ -13,19 +13,19 @@ def lib_search(request):
     return render(request, 'lib_man/library_search.html', context)
 
 def dashboard(request):
-    return render(request, 'lib_man/dashboard.html')
+    return render(request, 'lib_man/portalPages/dashboard.html')
 
 def books(request):
     context = {
         'books': Book.objects.all()
     }
-    return HttpResponse("<div>Books</div>", context)
+    return render(request, 'lib_man/portalPages/books.html', context)
     
 def borrowers(request):
     context = {
         'borrowers': Borrower.objects.all()
     }
-    return HttpResponse("<div>Borrowers</div>", context)
+    return render(request, 'lib_man/portalPages/borrowers.html', context)
 
 def borrowed_books(request):
-    return HttpResponse("<div>Borrowers</div>")
+    return render(request, 'lib_man/portalPages/borrowed_books.html')

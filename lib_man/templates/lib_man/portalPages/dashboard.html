@@ -1,0 +1,37 @@
+{% extends 'lib_man/components/portal.html' %}
+    
+{% block portal %}
+<div class="tab-pane fade show active w-100 h-100" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+    <div class="row mb-5">
+        <div class="col-sm-6 px-md-5">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-1">Total Books</h5>
+                    <hr />
+                    <p class="card-text fs-2">9</p> <!-- ! Update the number in the p tag -->
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 px-md-5">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-1">Total Borrowed Books</h5>
+                    <hr />
+                    <p class="card-text fs-2">9</p> <!-- ! Update the number in the p tag -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col px-md-5">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-body text-center">
+                    <h5 class="card-title fs-1">Total Borrowers</h5>
+                    <hr />
+                    <p class="card-text fs-2">9</p> <!-- ! Update the number in the p tag -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
