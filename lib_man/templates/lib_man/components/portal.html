@@ -14,7 +14,6 @@
     window.onload = function () {
       let loc = location.href.split('/')[5];
       let elements = document.getElementsByClassName('mainNavMenuButtons');
-      console.log(elements.length)
       for (let i = 0; i < elements.length; i++) {
         if (elements[i].dataset.target == loc) {
           elements[i].classList.add('active');

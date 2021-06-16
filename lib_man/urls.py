@@ -12,4 +12,6 @@ urlpatterns = [
     path('admin/borrowers', views.borrowers, name="borrowers"),
     path('admin/borrowed_books', views.borrowed_books, name="borrowed_books"),
 
+    path('edit_book', views.edit_book, name="edit_book"),
+
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
