@@ -1,6 +1,20 @@
 from django import forms
 from .models import Book
 
+class LoginForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'id': "username",
+            'class': 'form-control'
+        }
+    ))
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'id': "password",
+            'class': 'form-control'
+        }
+    ))
+
 class EditBookForm(forms.ModelForm):
     class Meta:
         model = Book

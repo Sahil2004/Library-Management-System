@@ -1,11 +1,15 @@
-from django.core import serializers
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from .models import Book, Borrower
-from .forms import EditBookForm, AddBookForm
+from .forms import EditBookForm, AddBookForm, LoginForm
 
-def login(request):
-    return render(request, 'lib_man/login.html')
+def login_page(request):
+    context = {
+        'login_form': LoginForm()
+    }
+    return render(request, 'lib_man/login.html', context)
 
 def lib_search(request):
     context = {
@@ -13,9 +17,16 @@ def lib_search(request):
     }
     return render(request, 'lib_man/library_search.html', context)
 
+@login_required(login_url='/lib_man/login')
 def dashboard(request):
-    return render(request, 'lib_man/portalPages/dashboard.html')
+    context = {
+        'no_of_books': Book.objects.all().count(),
+        'no_of_borrowed_books': Book.objects.filter(status_borrowed=True).count(),
+        'no_of_borrowers': Borrower.objects.all().count()
+    }
+    return render(request, 'lib_man/portalPages/dashboard.html', context)
 
+@login_required(login_url='/lib_man/login')
 def books(request):
     context = {
         'books': Book.objects.all(),
@@ -24,16 +35,32 @@ def books(request):
     }
     return render(request, 'lib_man/portalPages/books.html', context)
 
+@login_required(login_url='/lib_man/login')
 def borrowers(request):
     context = {
         'borrowers': Borrower.objects.all()
     }
     return render(request, 'lib_man/portalPages/borrowers.html', context)
 
+@login_required(login_url='/lib_man/login')
 def borrowed_books(request):
     return render(request, 'lib_man/portalPages/borrowed_books.html')
 
 # Functions
+
+def librarian_login(request):
+    username = request.GET.get('username')
+    password = request.GET.get('password')
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        return redirect('librarian/dashboard')
+    else:
+        return redirect('login/')
+
+def librarian_logout(request):
+    logout(request)
+    return redirect('login/')
 
 def edit_book(request):
     book = Book.objects.get(pk = request.POST.get('pk'))
@@ -48,7 +75,7 @@ def edit_book(request):
     else:
         book.status_borrowed = False
     book.save()
-    return HttpResponseRedirect('admin/books')
+    return redirect('librarian/books')
 
 def add_book(request):
     status_borrowed = True
@@ -65,9 +92,9 @@ def add_book(request):
         book_location=request.POST.get('book_location'),
         status_borrowed=status_borrowed
     )
-    return HttpResponseRedirect('admin/books')
+    return redirect('librarian/books')
 
 def delete_book(request):
     book = Book.objects.get(pk = request.POST.get('pk'))
     book.delete()
-    return HttpResponseRedirect('admin/books')
+    return redirect('librarian/books')

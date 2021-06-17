@@ -1,3 +1,6 @@
 username: admin
 Email address: 
 Password: damisa123
+
+username: librarian
+password: Admin@123

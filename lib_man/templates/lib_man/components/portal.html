@@ -4,10 +4,10 @@
 
 <div class="d-flex align-items-start w-100">
   <div class="nav flex flex-column nav-pills w-25 p-5 align-middle shadow bg-white" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="height: 100vh; position: relative; z-index: 1;">
-    <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="dashboard" onclick="location.href='/lib_man/admin/dashboard'">Dashboard</button>
-    <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="books" onclick="location.href='/lib_man/admin/books'">Books</button>
-    <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="borrowers" onclick="location.href='/lib_man/admin/borrowers'">Borrowers</button>
-    <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="borrowed_books" onclick="location.href='/lib_man/admin/borrowed_books'">Borrowed Books</button>
+    <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="dashboard" onclick="location.href='/lib_man/librarian/dashboard'">Dashboard</button>
+    <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="books" onclick="location.href='/lib_man/librarian/books'">Books</button>
+    <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="borrowers" onclick="location.href='/lib_man/librarian/borrowers'">Borrowers</button>
+    <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="borrowed_books" onclick="location.href='/lib_man/librarian/borrowed_books'">Borrowed Books</button>
   </div>
 
   <script defer>
@@ -30,7 +30,9 @@
           <a class="navbar-brand fs-4">Library Management System</a>
           <span>
             <span class="fs-5 me-2">Administrator</span>
-            <button class="btn btn-outline-success my-1" type="submit">Logout</button>
+            <form action="{% url 'librarian_logout' %}" method="GET">
+              <button class="btn btn-outline-success my-1" type="submit">Logout</button>
+            </form>
           </span>
         </div>
       </nav>
