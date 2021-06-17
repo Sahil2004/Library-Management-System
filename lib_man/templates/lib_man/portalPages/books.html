@@ -3,6 +3,9 @@
 {% block portal %}
 
 <table class="table">
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" 
+                    data-bs-target="#addBook" 
+                    style="width: 5vw; margin-bottom: 1vh;">Add</button>
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -39,7 +42,7 @@
             </td>
             <td>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" 
-                    data-bs-target="#staticBackdrop" 
+                    data-bs-target="#editBook" 
                     style="width: 5vw; margin-bottom: 1vh;" 
                     onclick="editBookHandler({
                         pk: '{{ book.pk }}',
@@ -56,43 +59,43 @@
         </tr>
         {% endfor %}
     </tbody>
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="editBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editBookLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <form method="POST" action="{% url 'edit_book' %}">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Edit Book</h5>
+                        <h5 class="modal-title" id="editBookLabel">Edit Book</h5>
                     </div>
                     <div class="modal-body">
-                        {{ form.pk }}
+                        {{ edit_book_form.pk }}
                         <div class="mb-3">
                             <label for="title" class="form-label">Book Title</label>
-                            {{ form.title }}
+                            {{ edit_book_form.title }}
                         </div>
                         <div class="mb-3">
                             <label for="author" class="form-label">Book Author</label>
-                            {{ form.author }}                        
+                            {{ edit_book_form.author }}                        
                         </div>
                         <div class="mb-3">
                             <label for="ISBNno" class="form-label">ISBN Number</label>
-                            {{ form.isbn }}                        
+                            {{ edit_book_form.isbn }}                        
                         </div>
                         <div class="mb-3">
                             <label for="pubHouse" class="form-label">Publishing House</label>
-                            {{ form.publisher }}                       
+                            {{ edit_book_form.publisher }}                       
                          </div>
                         <div class="mb-3">
                             <label for="genre" class="form-label">Genre</label>
-                            {{ form.genre }}                        
+                            {{ edit_book_form.genre }}                        
                         </div>
                         <div class="mb-3">
                             <label for="location" class="form-label">Book Location</label>
-                            {{ form.book_location }}                        
+                            {{ edit_book_form.book_location }}                        
                         </div>
                         <div class="mb-3">
                             <label class="form-check-label" for="status_borrowed">The book is borrowed</label>
-                            {{ form.status_borrowed}}                        
+                            {{ edit_book_form.status_borrowed}}                        
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -103,7 +106,53 @@
             </form>
         </div>
     </div>
-  </div>
+    <div class="modal fade" id="addBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addBookLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <form method="POST" action="{% url 'add_book' %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addBookLabel">Edit Book</h5>
+                    </div>
+                    <div class="modal-body">
+                        {{ add_book_form.pk }}
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Book Title</label>
+                            {{ add_book_form.title }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="author" class="form-label">Book Author</label>
+                            {{ add_book_form.author }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="ISBNno" class="form-label">ISBN Number</label>
+                            {{ add_book_form.isbn }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="pubHouse" class="form-label">Publishing House</label>
+                            {{ add_book_form.publisher }}                       
+                         </div>
+                        <div class="mb-3">
+                            <label for="genre" class="form-label">Genre</label>
+                            {{ add_book_form.genre }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Book Location</label>
+                            {{ add_book_form.book_location }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="status_borrowed">The book is borrowed</label>
+                            {{ add_book_form.status_borrowed}}                        
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
+                        <input type="submit" class="btn btn-primary" value="Add">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </table>
 <script>
     const editBookHandler = (book) => {

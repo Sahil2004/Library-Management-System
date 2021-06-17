@@ -65,3 +65,62 @@ class EditBookForm(forms.ModelForm):
             'id': 'status_borrowed',
         },
     ))
+
+class AddBookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = '__all__'
+    title = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': 'Enter Title',
+            'id': "titleAdd"
+        }
+    ))
+    author = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': "Enter author's name",
+            'id': 'authorAdd'
+        }
+    ))
+    isbn = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '13',
+            'placeholder': 'Enter ISBN number',
+            'id': 'ISBNnoAdd'
+        }
+    ))
+    publisher = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': "Enter publisher's name",
+            'id': 'pubHouseAdd'
+        }
+    ))
+    genre = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': 'Enter genre',
+            'id': 'genreAdd'
+        }
+    ))
+    book_location = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': 'Enter book location',
+            'id': 'locationAdd'
+        }
+    ))
+    status_borrowed = forms.BooleanField(required=False, widget=forms.CheckboxInput(
+        attrs={
+            'class': 'form-check-label',
+            'id': 'status_borrowedAdd',
+        },
+    ))

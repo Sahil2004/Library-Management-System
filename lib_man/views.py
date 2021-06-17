@@ -2,7 +2,7 @@ from django.core import serializers
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from .models import Book, Borrower
-from .forms import EditBookForm
+from .forms import EditBookForm, AddBookForm
 
 def login(request):
     return render(request, 'lib_man/login.html')
@@ -19,7 +19,8 @@ def dashboard(request):
 def books(request):
     context = {
         'books': Book.objects.all(),
-        'form': EditBookForm()
+        'edit_book_form': EditBookForm(),
+        'add_book_form': AddBookForm()
     }
     return render(request, 'lib_man/portalPages/books.html', context)
 
@@ -47,5 +48,26 @@ def edit_book(request):
     else:
         book.status_borrowed = False
     book.save()
+    return HttpResponseRedirect('admin/books')
 
+def add_book(request):
+    status_borrowed = True
+    if request.POST.get('status_borrowed') == 'on':
+        status_borrowed = True
+    else:
+        status_borrowed = False
+    book = Book.objects.create(
+        title=request.POST.get('title'),
+        author=request.POST.get('author'),
+        isbn=request.POST.get('isbn'),
+        publisher=request.POST.get('publisher'),
+        genre=request.POST.get('genre'),
+        book_location=request.POST.get('book_location'),
+        status_borrowed=status_borrowed
+    )
+    return HttpResponseRedirect('admin/books')
+
+def delete_book(request):
+    book = Book.objects.get(pk = request.POST.get('pk'))
+    book.delete()
     return HttpResponseRedirect('admin/books')
