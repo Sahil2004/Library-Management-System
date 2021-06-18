@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import Book, Borrower
-from .forms import EditBookForm, AddBookForm, LoginForm
+from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm
 
 def login_page(request):
     context = {
@@ -31,7 +31,8 @@ def books(request):
     context = {
         'books': Book.objects.all(),
         'edit_book_form': EditBookForm(),
-        'add_book_form': AddBookForm()
+        'add_book_form': AddBookForm(),
+        'delete_book_form': DeleteBookForm()
     }
     return render(request, 'lib_man/portalPages/books.html', context)
 

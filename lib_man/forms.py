@@ -22,7 +22,7 @@ class EditBookForm(forms.ModelForm):
     pk = forms.IntegerField(widget=forms.NumberInput(
         attrs={
             'style': 'display: none',
-            'id': "primary_key"
+            'id': "primaryKeyEdit"
         }
     ))
     title = forms.CharField(widget=forms.TextInput(
@@ -30,7 +30,7 @@ class EditBookForm(forms.ModelForm):
             'class': 'form-control',
             'maxlength': '50',
             'placeholder': 'Enter Title',
-            'id': "title"
+            'id': 'titleEdit'
         }
     ))
     author = forms.CharField(widget=forms.TextInput(
@@ -38,7 +38,7 @@ class EditBookForm(forms.ModelForm):
             'class': 'form-control',
             'maxlength': '50',
             'placeholder': "Enter author's name",
-            'id': 'author'
+            'id': 'authorEdit'
         }
     ))
     isbn = forms.CharField(widget=forms.TextInput(
@@ -46,7 +46,7 @@ class EditBookForm(forms.ModelForm):
             'class': 'form-control',
             'maxlength': '13',
             'placeholder': 'Enter ISBN number',
-            'id': 'ISBNno'
+            'id': 'isbnNoEdit'
         }
     ))
     publisher = forms.CharField(widget=forms.TextInput(
@@ -54,7 +54,7 @@ class EditBookForm(forms.ModelForm):
             'class': 'form-control',
             'maxlength': '50',
             'placeholder': "Enter publisher's name",
-            'id': 'pubHouse'
+            'id': 'pubHouseEdit'
         }
     ))
     genre = forms.CharField(widget=forms.TextInput(
@@ -62,7 +62,7 @@ class EditBookForm(forms.ModelForm):
             'class': 'form-control',
             'maxlength': '50',
             'placeholder': 'Enter genre',
-            'id': 'genre'
+            'id': 'genreEdit'
         }
     ))
     book_location = forms.CharField(widget=forms.TextInput(
@@ -70,13 +70,13 @@ class EditBookForm(forms.ModelForm):
             'class': 'form-control',
             'maxlength': '50',
             'placeholder': 'Enter book location',
-            'id': 'location'
+            'id': 'bookLocationEdit'
         }
     ))
     status_borrowed = forms.BooleanField(required=False, widget=forms.CheckboxInput(
         attrs={
             'class': 'form-check-label',
-            'id': 'status_borrowed',
+            'id': 'statusBorrowedEdit',
         },
     ))
 
@@ -129,12 +129,23 @@ class AddBookForm(forms.ModelForm):
             'class': 'form-control',
             'maxlength': '50',
             'placeholder': 'Enter book location',
-            'id': 'locationAdd'
+            'id': 'bookLocationAdd'
         }
     ))
     status_borrowed = forms.BooleanField(required=False, widget=forms.CheckboxInput(
         attrs={
             'class': 'form-check-label',
-            'id': 'status_borrowedAdd',
+            'id': 'statusBorrowedAdd',
         },
+    ))
+
+class DeleteBookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = '__all__'
+    pk = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'style': 'display: none',
+            'id': "primaryKeyDel"
+        }
     ))

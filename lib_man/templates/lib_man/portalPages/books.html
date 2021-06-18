@@ -16,7 +16,7 @@
             <th scope="col">#</th>
             <th scope="col">Book Title</th>
             <th scope="col">Book Author</th>
-            <th scope="col">ISBN number</th>
+            <th scope="col">ISBN Number</th>
             <th scope="col">Publishing House</th>
             <th scope="col">Genre</th>
             <th scope="col">Book Location</th>
@@ -27,7 +27,7 @@
     <tbody>
         {% for book in books %}
         <tr>
-            <th>{{ book.pk }}</th>
+            <th>{{ forloop.counter }}</th>
             <td>{{ book.title }}</td>
             <td>{{ book.author }}</td>
             <td>{{ book.isbn }}</td>
@@ -36,11 +36,11 @@
             <td>{{ book.book_location }}</td>
             <td>
                 {% if book.status_borrowed == True %}
-                <span class="borrowed text-secondary">
+                <span class="text-secondary">
                     Borrowed
                 </span>
                 {% else %}
-                <span class="available text-success">
+                <span class="text-success">
                     Available
                 </span>
                 {% endif %}
@@ -59,7 +59,7 @@
                         status_borrowed: '{{ book.status_borrowed }}'
                     })">Edit</button>
                 <button type="button" class="btn btn-danger"data-bs-toggle="modal" data-bs-target="#deleteBook"
-                onclick="editBookHandler({
+                onclick="deleteBookHandler({
                     pk: '{{ book.pk }}',
                     title: '{{ book.title }}',
                     author: '{{ book.author }}',
@@ -84,31 +84,31 @@
                     <div class="modal-body">
                         {{ edit_book_form.pk }}
                         <div class="mb-3">
-                            <label for="title" class="form-label">Book Title</label>
+                            <label for="titleEdit" class="form-label">Book Title</label>
                             {{ edit_book_form.title }}
                         </div>
                         <div class="mb-3">
-                            <label for="author" class="form-label">Book Author</label>
+                            <label for="authorEdit" class="form-label">Book Author</label>
                             {{ edit_book_form.author }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="ISBNno" class="form-label">ISBN Number</label>
+                            <label for="isbnNoEdit" class="form-label">ISBN Number</label>
                             {{ edit_book_form.isbn }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="pubHouse" class="form-label">Publishing House</label>
+                            <label for="pubHouseEdit" class="form-label">Publishing House</label>
                             {{ edit_book_form.publisher }}                       
                          </div>
                         <div class="mb-3">
-                            <label for="genre" class="form-label">Genre</label>
+                            <label for="genreEdit" class="form-label">Genre</label>
                             {{ edit_book_form.genre }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="location" class="form-label">Book Location</label>
+                            <label for="bookLocationEdit" class="form-label">Book Location</label>
                             {{ edit_book_form.book_location }}                        
                         </div>
                         <div class="mb-3">
-                            <label class="form-check-label" for="status_borrowed">The book is borrowed</label>
+                            <label class="form-check-label" for="statusBorrowedEdit">The book is borrowed</label>
                             {{ edit_book_form.status_borrowed}}                        
                         </div>
                     </div>
@@ -122,54 +122,58 @@
     </div>
     <div class="modal fade" id="deleteBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteBookLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <form method="POST" action="{% url 'delete_book' %}">
+                {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="deleteBookLabel">Delete Book</h5>
                     </div>
                     <div class="modal-body">
+                        {{ delete_book_form.pk }}
                         <div class="container-fluid fs-5">
                             <div class="row mb-2">
                               <div class="col">Book Title</div>
                               <div class="col-1">:</div>
-                              <div class="col">Pride and Prejudice</div>
+                              <div class="col fw-bold" id="titleDel"></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col">Book Author</div>
                                 <div class="col-1">:</div>
-                                <div class="col">[book author]</div>
+                                <div class="col fw-bold" id="authorDel"></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col">ISBN Number</div>
                                 <div class="col-1">:</div>
-                                <div class="col">[isbn number]</div>
+                                <div class="col fw-bold" id="isbnNoDel"></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col">Publishing House</div>
                                 <div class="col-1">:</div>
-                                <div class="col">[publishing house]</div>
+                                <div class="col fw-bold" id="pubHouseDel"></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col">Genre</div>
                                 <div class="col-1">:</div>
-                                <div class="col">[genre]</div>
+                                <div class="col fw-bold" id="genreDel"></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col">Book Location</div>
                                 <div class="col-1">:</div>
-                                <div class="col">[book location]</div>
+                                <div class="col fw-bold" id="bookLocationDel"></div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col">Book Status</div>
                                 <div class="col-1">:</div>
-                                <div class="col">[book borrowed or not]</div>
+                                <div class="col fw-bold" id="statusBorrowedDel"></div>
                             </div>
                           </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Revert back</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Revert</button>
                         <input type="submit" class="btn btn-danger" value="Delete">
                     </div>
                 </div>
+            </form>
         </div>
     </div>
     <div class="modal fade" id="addBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addBookLabel" aria-hidden="true">
@@ -183,31 +187,31 @@
                     <div class="modal-body">
                         {{ add_book_form.pk }}
                         <div class="mb-3">
-                            <label for="title" class="form-label">Book Title</label>
+                            <label for="titleAdd" class="form-label">Book Title</label>
                             {{ add_book_form.title }}
                         </div>
                         <div class="mb-3">
-                            <label for="author" class="form-label">Book Author</label>
+                            <label for="authorAdd" class="form-label">Book Author</label>
                             {{ add_book_form.author }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="ISBNno" class="form-label">ISBN Number</label>
+                            <label for="ISBNnoAdd" class="form-label">ISBN Number</label>
                             {{ add_book_form.isbn }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="pubHouse" class="form-label">Publishing House</label>
+                            <label for="pubHouseAdd" class="form-label">Publishing House</label>
                             {{ add_book_form.publisher }}                       
                          </div>
                         <div class="mb-3">
-                            <label for="genre" class="form-label">Genre</label>
+                            <label for="genreAdd" class="form-label">Genre</label>
                             {{ add_book_form.genre }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="location" class="form-label">Book Location</label>
+                            <label for="bookLocationAdd" class="form-label">Book Location</label>
                             {{ add_book_form.book_location }}                        
                         </div>
                         <div class="mb-3">
-                            <label class="form-check-label" for="status_borrowed">The book is borrowed</label>
+                            <label class="form-check-label" for="statusBorrowedAdd">The book is borrowed</label>
                             {{ add_book_form.status_borrowed}}                        
                         </div>
                     </div>
@@ -222,17 +226,34 @@
 </table>
 <script>
     const editBookHandler = (book) => {
-        document.getElementById('primary_key').value = book.pk
-        document.getElementById('title').value = book.title
-        document.getElementById('author').value = book.author
-        document.getElementById('genre').value = book.genre
-        document.getElementById('ISBNno').value = book.isbn
-        document.getElementById('pubHouse').value = book.publisher
-        document.getElementById('location').value = book.book_location
+        document.getElementById('primaryKeyEdit').value = book.pk
+        document.getElementById('titleEdit').value = book.title
+        document.getElementById('authorEdit').value = book.author
+        document.getElementById('genreEdit').value = book.genre
+        document.getElementById('isbnNoEdit').value = book.isbn
+        document.getElementById('pubHouseEdit').value = book.publisher
+        document.getElementById('bookLocationEdit').value = book.book_location
         if(book.status_borrowed === "True") 
-            document.getElementById('status_borrowed').checked = true
+            document.getElementById('statusBorrowedEdit').checked = true
         else
-            document.getElementById('status_borrowed').checked = false
+            document.getElementById('statusBorrowedEdit').checked = false
+    }
+    const deleteBookHandler = (book) => {
+        document.getElementById('primaryKeyDel').value = book.pk
+        document.getElementById('titleDel').innerHTML = book.title
+        document.getElementById('authorDel').innerHTML = book.author
+        document.getElementById('genreDel').innerHTML = book.genre
+        document.getElementById('isbnNoDel').innerHTML = book.isbn
+        document.getElementById('pubHouseDel').innerHTML = book.publisher
+        document.getElementById('bookLocationDel').innerHTML = book.book_location
+        if(book.status_borrowed === "True") {
+            document.getElementById('statusBorrowedDel').innerHTML = 'Borrowed'
+            document.getElementById('statusBorrowedDel').classList.add('text-secondary')
+        }
+        else {
+            document.getElementById('statusBorrowedDel').innerHTML = 'Available'
+            document.getElementById('statusBorrowedDel').classList.add('text-success')
+        }
 
     }
 </script>
