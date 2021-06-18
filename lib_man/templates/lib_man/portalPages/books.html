@@ -35,13 +35,13 @@
         {% for book in books %}
         <tr>
             <th>{{ forloop.counter }}</th>
-            <td>{{ book.title }}</td>
-            <td>{{ book.author }}</td>
-            <td>{{ book.isbn }}</td>
-            <td>{{ book.publisher }}</td>
-            <td>{{ book.genre }}</td>
-            <td>{{ book.book_location }}</td>
-            <td>
+            <td id="title{{ forloop.counter }}">{{ book.title }}</td>
+            <td id="author{{ forloop.counter }}">{{ book.author }}</td>
+            <td id="isbnNo{{ forloop.counter }}">{{ book.isbn }}</td>
+            <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
+            <td id="genre{{ forloop.counter }}">{{ book.genre }}</td>
+            <td id="bookLocation{{ forloop.counter }}">{{ book.book_location }}</td>
+            <td id="statusBorrowed{{ forloop.counter }}">
                 {% if book.status_borrowed == True %}
                 <span class="text-secondary">
                     Borrowed
@@ -52,31 +52,18 @@
                 </span>
                 {% endif %}
             </td>
+            {% autoescape on %}
+
             <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" 
                     data-bs-target="#editBook"
-                    onclick="editBookHandler({
-                        pk: '{{ book.pk }}',
-                        title: '{{ book.title }}',
-                        author: '{{ book.author }}',
-                        isbn: '{{ book.isbn }}',
-                        publisher: '{{ book.publisher }}',
-                        genre: '{{ book.genre }}',
-                        book_location: '{{ book.book_location }}',
-                        status_borrowed: '{{ book.status_borrowed }}'
-                    })">Edit</button>
-                <button type="button" class="btn btn-danger"data-bs-toggle="modal" data-bs-target="#deleteBook"
-                onclick="deleteBookHandler({
-                    pk: '{{ book.pk }}',
-                    title: '{{ book.title }}',
-                    author: '{{ book.author }}',
-                    isbn: '{{ book.isbn }}',
-                    publisher: '{{ book.publisher }}',
-                    genre: '{{ book.genre }}',
-                    book_location: '{{ book.book_location }}',
-                    status_borrowed: '{{ book.status_borrowed }}'
-                })">Delete</button>
+                    onclick="editBookHandler('{{ forloop.counter }}', '{{ book.pk }}')">Edit</button>
+                <button type="button" class="btn btn-danger"data-bs-toggle="modal" 
+                    data-bs-target="#deleteBook"
+                    onclick="deleteBookHandler('{{ forloop.counter }}', '{{ book.pk }}')">Delete</button>
             </td>
+            {% endautoescape %}
+
         </tr>
         {% empty %}
         <tr>
@@ -198,7 +185,6 @@
                         <h5 class="modal-title" id="addBookLabel">Edit Book</h5>
                     </div>
                     <div class="modal-body">
-                        {{ add_book_form.pk }}
                         <div class="mb-3">
                             <label for="titleAdd" class="form-label">Book Title</label>
                             {{ add_book_form.title }}
@@ -238,36 +224,39 @@
     </div>
 </table>
 <script>
-    const editBookHandler = (book) => {
-        document.getElementById('primaryKeyEdit').value = book.pk
-        document.getElementById('titleEdit').value = book.title
-        document.getElementById('authorEdit').value = book.author
-        document.getElementById('genreEdit').value = book.genre
-        document.getElementById('isbnNoEdit').value = book.isbn
-        document.getElementById('pubHouseEdit').value = book.publisher
-        document.getElementById('bookLocationEdit').value = book.book_location
-        if(book.status_borrowed === "True") 
+    const editBookHandler = (rowNum, id) => {
+        document.getElementById('primaryKeyEdit').value = id
+        document.getElementById('titleEdit').value = document.getElementById('title'+rowNum).innerHTML
+        document.getElementById('authorEdit').value = document.getElementById('author'+rowNum).innerHTML
+        document.getElementById('genreEdit').value = document.getElementById('genre'+rowNum).innerHTML
+        document.getElementById('isbnNoEdit').value = document.getElementById('isbnNo'+rowNum).innerHTML
+        document.getElementById('pubHouseEdit').value = document.getElementById('pubHouse'+rowNum).innerHTML
+        document.getElementById('bookLocationEdit').value = document.getElementById('bookLocation'+rowNum).innerHTML
+        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") 
             document.getElementById('statusBorrowedEdit').checked = true
         else
             document.getElementById('statusBorrowedEdit').checked = false
     }
-    const deleteBookHandler = (book) => {
-        document.getElementById('primaryKeyDel').value = book.pk
-        document.getElementById('titleDel').innerHTML = book.title
-        document.getElementById('authorDel').innerHTML = book.author
-        document.getElementById('genreDel').innerHTML = book.genre
-        document.getElementById('isbnNoDel').innerHTML = book.isbn
-        document.getElementById('pubHouseDel').innerHTML = book.publisher
-        document.getElementById('bookLocationDel').innerHTML = book.book_location
-        if(book.status_borrowed === "True") {
-            document.getElementById('statusBorrowedDel').innerHTML = 'Borrowed'
+    const deleteBookHandler = (rowNum, id) => {
+        document.getElementById('primaryKeyDel').value = id
+        document.getElementById('titleDel').innerHTML = document.getElementById('title'+rowNum).innerHTML
+        document.getElementById('authorDel').innerHTML = document.getElementById('author'+rowNum).innerHTML
+        document.getElementById('genreDel').innerHTML = document.getElementById('genre'+rowNum).innerHTML
+        document.getElementById('isbnNoDel').innerHTML = document.getElementById('isbnNo'+rowNum).innerHTML
+        document.getElementById('pubHouseDel').innerHTML = document.getElementById('pubHouse'+rowNum).innerHTML
+        document.getElementById('bookLocationDel').innerHTML = document.getElementById('bookLocation'+rowNum).innerHTML
+        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") {
+            document.getElementById('statusBorrowedDel').innerHTML = "Borrowed"
             document.getElementById('statusBorrowedDel').classList.add('text-secondary')
         }
         else {
-            document.getElementById('statusBorrowedDel').innerHTML = 'Available'
+            document.getElementById('statusBorrowedDel').innerHTML = "Available"
             document.getElementById('statusBorrowedDel').classList.add('text-success')
         }
-
     }
-</script>
+
+</script>            
+
+
+<script src="https://cdn.jsdelivr.net/npm/underscore@1.13.1/underscore-umd-min.js"></script>
 {% endblock %}

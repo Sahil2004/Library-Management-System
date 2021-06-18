@@ -130,14 +130,14 @@ def add_book(request):
         status_borrowed = True
     else:
         status_borrowed = False
-        Book.objects.create(
-        title=request.POST.get('title'),
-        author=request.POST.get('author'),
-        isbn=request.POST.get('isbn'),
-        publisher=request.POST.get('publisher'),
-        genre=request.POST.get('genre'),
-        book_location=request.POST.get('book_location'),
-        status_borrowed=status_borrowed
+    Book.objects.create(
+    title=request.POST.get('title'),
+    author=request.POST.get('author'),
+    isbn=request.POST.get('isbn'),
+    publisher=request.POST.get('publisher'),
+    genre=request.POST.get('genre'),
+    book_location=request.POST.get('book_location'),
+    status_borrowed=status_borrowed
     )
     return redirect('books')
 
