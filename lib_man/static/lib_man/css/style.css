@@ -14,6 +14,10 @@ label {
   font-size: 1.2em;
 }
 
+button {
+  min-width: 80px;
+}
+
 button[type=submit] {
   font-size: 1.2em;
   margin-top: 2vh;

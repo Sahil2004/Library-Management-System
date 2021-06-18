@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('login/', views.login_page, name="login_page"),
+    path('login/', views.login, name="login"),
     path('library_search/', views.lib_search, name="lib_search"),
     path('librarian/dashboard', views.dashboard, name="dashboard"),
     path('librarian/books', views.books, name="books"),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('edit_book', views.edit_book, name="edit_book"),
     path('add_book', views.add_book, name="add_book"),
     path('delete_book', views.delete_book, name="delete_book"),
+    path('search_books', views.search_books, name="search_books")
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

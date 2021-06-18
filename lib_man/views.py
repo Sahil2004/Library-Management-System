@@ -1,15 +1,42 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login as login_user, logout as logout_user
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.urls import reverse
+from urllib.parse import urlencode
 from .models import Book, Borrower
-from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm
+from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm, SearchBooksForm
 
-def login_page(request):
+
+def search_results(keyword, search_by):
+    if search_by == 'Book Title':
+        return Book.objects.filter(Q(title__icontains=keyword))
+    if search_by == 'Book Author':
+        return Book.objects.filter(Q(author__icontains=keyword))
+    if search_by == 'ISBN Number':
+        return Book.objects.filter(Q(isbn__icontains=keyword))
+    if search_by == 'Publishing House':
+        return Book.objects.filter(Q(publisher__icontains=keyword))
+    if search_by == 'Genre':
+        return Book.objects.filter(Q(genre__icontains=keyword))
+    if search_by == 'Book Location':
+        return Book.objects.filter(Q(book_location__icontains=keyword))
+    if search_by == 'Status':
+        if not keyword.upper() == 'AVAILABLE' and not keyword.upper() == 'BORROWED':
+            return Book.objects.none()
+        else:
+            status = keyword.upper() == 'BORROWED'
+            return Book.objects.filter(status_borrowed=status)
+
+# Pages
+
+def login(request):
     context = {
         'login_form': LoginForm()
     }
     return render(request, 'lib_man/login.html', context)
+
+
 
 def lib_search(request):
     context = {
@@ -17,7 +44,9 @@ def lib_search(request):
     }
     return render(request, 'lib_man/library_search.html', context)
 
-@login_required(login_url='/lib_man/login')
+
+
+@login_required(login_url='login')
 def dashboard(request):
     context = {
         'no_of_books': Book.objects.all().count(),
@@ -26,42 +55,59 @@ def dashboard(request):
     }
     return render(request, 'lib_man/portalPages/dashboard.html', context)
 
-@login_required(login_url='/lib_man/login')
+
+@login_required(login_url='login')
 def books(request):
-    context = {
-        'books': Book.objects.all(),
-        'edit_book_form': EditBookForm(),
-        'add_book_form': AddBookForm(),
-        'delete_book_form': DeleteBookForm()
-    }
+    context = {}
+    if not request.GET:
+        context = {
+            'books': Book.objects.all(),
+            'edit_book_form': EditBookForm(),
+            'add_book_form': AddBookForm(),
+            'delete_book_form': DeleteBookForm(),
+            'search_books_form': SearchBooksForm()
+        }
+    else:
+        context = {
+            'books': search_results(request.GET.get('keyword'), request.GET.get('search_by')),
+            'edit_book_form': EditBookForm(),
+            'add_book_form': AddBookForm(),
+            'delete_book_form': DeleteBookForm(),
+            'search_books_form': SearchBooksForm()
+        }
+
     return render(request, 'lib_man/portalPages/books.html', context)
 
-@login_required(login_url='/lib_man/login')
+
+
+@login_required(login_url='login')
 def borrowers(request):
     context = {
         'borrowers': Borrower.objects.all()
     }
     return render(request, 'lib_man/portalPages/borrowers.html', context)
 
-@login_required(login_url='/lib_man/login')
+
+
+@login_required(login_url='login')
 def borrowed_books(request):
     return render(request, 'lib_man/portalPages/borrowed_books.html')
 
-# Functions
+# App functions
 
 def librarian_login(request):
     username = request.GET.get('username')
     password = request.GET.get('password')
     user = authenticate(request, username=username, password=password)
     if user is not None:
-        login(request, user)
-        return redirect('librarian/dashboard')
+        login_user(request, user)
+        return redirect('dashboard')
     else:
-        return redirect('login/')
+        return redirect('login')
 
 def librarian_logout(request):
-    logout(request)
-    return redirect('login/')
+    logout_user(request)
+    return redirect('login')
 
 def edit_book(request):
     book = Book.objects.get(pk = request.POST.get('pk'))
@@ -76,7 +122,7 @@ def edit_book(request):
     else:
         book.status_borrowed = False
     book.save()
-    return redirect('librarian/books')
+    return redirect('books')
 
 def add_book(request):
     status_borrowed = True
@@ -84,7 +130,7 @@ def add_book(request):
         status_borrowed = True
     else:
         status_borrowed = False
-    book = Book.objects.create(
+        Book.objects.create(
         title=request.POST.get('title'),
         author=request.POST.get('author'),
         isbn=request.POST.get('isbn'),
@@ -93,9 +139,15 @@ def add_book(request):
         book_location=request.POST.get('book_location'),
         status_borrowed=status_borrowed
     )
-    return redirect('librarian/books')
+    return redirect('books')
 
 def delete_book(request):
     book = Book.objects.get(pk = request.POST.get('pk'))
     book.delete()
-    return redirect('librarian/books')
+    return redirect('books')
+
+def search_books(request):
+    base_url = reverse('books')
+    query_string =  urlencode({'search_by': request.POST.get('search_by'), 'keyword': request.POST.get('keyword')})
+    url = '{}?{}'.format(base_url, query_string)
+    return redirect(url)

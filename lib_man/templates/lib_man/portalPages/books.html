@@ -1,15 +1,22 @@
 {% extends 'lib_man/components/portal.html' %}
-    
+
 {% block portal %}
-<div class="d-inline-flex w-100 mb-5 pe-10 justify-content-between">
-    <div class="input-group w-75 ">
-        <input type="text" class="form-control" placeholder="Search" aria-label="Search"aria-describedby="basic-addon2" autofocus tabindex="1">
-        <div class="input-group-append">
-            <span class="input-group-text" style="cursor: no-drop" id="basic-addon2">Search</span>
-        </div>
+
+<form action='{% url "search_books" %}' method="POST">
+    {% csrf_token %}
+    <div class="d-inline-flex w-100 mb-5 pe-10 justify-content-between">
+            <div class="input-group w-75 ">
+                    {{ search_books_form.keyword }}
+                    <div class="input-group-append">
+                        <input type="submit" class="input-group-text" id="basic-addon2" value="Search">
+                    </div>
+                    {{ search_books_form.search_by }}
+            </div>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBook">Add a book</button>
     </div>
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBook">Add a book</button>
-</div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
@@ -69,6 +76,12 @@
                     book_location: '{{ book.book_location }}',
                     status_borrowed: '{{ book.status_borrowed }}'
                 })">Delete</button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan='6' style="display: flex; justify-content: center; align-items: center;">
+                No Results Found
             </td>
         </tr>
         {% endfor %}

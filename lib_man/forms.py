@@ -149,3 +149,27 @@ class DeleteBookForm(forms.ModelForm):
             'id': "primaryKeyDel"
         }
     ))
+
+class SearchBooksForm(forms.Form):
+    keyword = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': 'Search',
+            'aria-label': 'Search',
+            'aria-describedby': 'basic-addon2',
+            'tabindex': '1',
+            'required': ''
+        }
+    ))
+    search_by = forms.ChoiceField(
+        choices=((
+            ('Book Title', 'Book Title'), 
+            ('Book Author', 'Book Author'),
+            ('ISBN Number', 'ISBN Number'),
+            ('Publishing House', 'Publishing House'), 
+            ('Genre', 'Genre'), 
+            ('Book Location', 'Book Location'), 
+            ('Status', 'Status')
+        ))
+    )
