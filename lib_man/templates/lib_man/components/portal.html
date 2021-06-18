@@ -2,31 +2,20 @@
     
 {% block headerAndFooter %}
 
-<div class="d-flex align-items-start w-100">
-  <div class="nav flex flex-column nav-pills p-5 align-middle shadow bg-white" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="width: 20%;height: 100vh; position: relative; z-index: 1;">
+<div class="d-flex w-100">
+  <div class="nav flex flex-column nav-pills p-5 align-middle shadow bg-white" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="width: 20vw;height: 100vh;position: relative;z-index: 2;">
     <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="dashboard" onclick="location.href='/lib_man/librarian/dashboard'">Dashboard</button>
     <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="books" onclick="location.href='/lib_man/librarian/books'">Books</button>
     <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="borrowers" onclick="location.href='/lib_man/librarian/borrowers'">Borrowers</button>
     <button class="mainNavMenuButtons nav-link py-3" data-bs-toggle="pill" type="button" role="tab" aria-selected="true" data-target="borrowed_books" onclick="location.href='/lib_man/librarian/borrowed_books'">Borrowed Books</button>
   </div>
 
-  <script defer>
-    window.onload = function () {
-      let loc = location.href.split('/')[5];
-      let elements = document.getElementsByClassName('mainNavMenuButtons');
-      for (let i = 0; i < elements.length; i++) {
-        if (elements[i].dataset.target == loc) {
-          elements[i].classList.add('active');
-        }
-      }
-    }
+  
 
-  </script>
-
-  <div class="col">
-    <div class="row px-0">
-      <nav class="navbar shadow navbar-light bg-white w-100">
-        <div class="container-fluid">
+  <div class="col" style="width: 80vw;">
+    <div class="row gx-0" style="width: 100%;">
+      <nav class="navbar shadow navbar-light bg-white" >
+        <div class="container-fluid px-5">
           <a class="navbar-brand fs-4">Library Management System</a>
           <span>
             <span class="fs-5 me-2">Administrator</span>
@@ -37,13 +26,26 @@
         </div>
       </nav>
     </div>
-    <div class="row py-5">
-      <div class="tab-content w-100 p-5" id="v-pills-tabContent">
+    <div class="row py-5" style="width: inherit;">
+      <div class="tab-content w-100 px-5" id="v-pills-tabContent">
         {% block portal %}
         {% endblock %}
       </div>
     </div>
   </div>
 </div>
+
+<script defer>
+  window.onload = function () {
+    let loc = location.href.split('/')[5];
+    let elements = document.getElementsByClassName('mainNavMenuButtons');
+    for (let i = 0; i < elements.length; i++) {
+      if (elements[i].dataset.target == loc) {
+        elements[i].classList.add('active');
+      }
+    }
+  }
+
+</script>
 
 {% endblock %}

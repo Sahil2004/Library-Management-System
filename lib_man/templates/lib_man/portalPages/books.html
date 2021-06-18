@@ -1,11 +1,16 @@
 {% extends 'lib_man/components/portal.html' %}
     
 {% block portal %}
-
+<div class="d-inline-flex w-100 mb-5 pe-10 justify-content-between">
+    <div class="input-group w-75 ">
+        <input type="text" class="form-control" placeholder="Search" aria-label="Search"aria-describedby="basic-addon2" autofocus tabindex="1">
+        <div class="input-group-append">
+            <span class="input-group-text" style="cursor: no-drop" id="basic-addon2">Search</span>
+        </div>
+    </div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBook">Add a book</button>
+</div>
 <table class="table">
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" 
-                    data-bs-target="#addBook" 
-                    style="width: 5vw; margin-bottom: 1vh;">Add</button>
     <thead>
         <tr>
             <th scope="col">#</th>
