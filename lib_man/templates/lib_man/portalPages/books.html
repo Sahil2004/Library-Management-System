@@ -74,7 +74,7 @@
         {% endfor %}
     </tbody>
     <div class="modal fade" id="editBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editBookLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
             <form method="POST" action="{% url 'edit_book' %}">
                 {% csrf_token %}
                 <div class="modal-content">
@@ -121,54 +121,59 @@
         </div>
     </div>
     <div class="modal fade" id="deleteBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteBookLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <form method="POST" action="{% url 'delete_book' %}">
-                {% csrf_token %}
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="deleteBookLabel">Delete Book</h5>
                     </div>
                     <div class="modal-body">
-                        {{ edit_book_form.pk }}
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Book Title</label>
-                            {{ edit_book_form.title }}
-                        </div>
-                        <div class="mb-3">
-                            <label for="author" class="form-label">Book Author</label>
-                            {{ edit_book_form.author }}                        
-                        </div>
-                        <div class="mb-3">
-                            <label for="ISBNno" class="form-label">ISBN Number</label>
-                            {{ edit_book_form.isbn }}                        
-                        </div>
-                        <div class="mb-3">
-                            <label for="pubHouse" class="form-label">Publishing House</label>
-                            {{ edit_book_form.publisher }}                       
-                         </div>
-                        <div class="mb-3">
-                            <label for="genre" class="form-label">Genre</label>
-                            {{ edit_book_form.genre }}                        
-                        </div>
-                        <div class="mb-3">
-                            <label for="location" class="form-label">Book Location</label>
-                            {{ edit_book_form.book_location }}                        
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-check-label" for="status_borrowed">The book is borrowed</label>
-                            {{ edit_book_form.status_borrowed}}                        
-                        </div>
+                        <div class="container-fluid fs-5">
+                            <div class="row mb-2">
+                              <div class="col">Book Title</div>
+                              <div class="col-1">:</div>
+                              <div class="col">Pride and Prejudice</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Book Author</div>
+                                <div class="col-1">:</div>
+                                <div class="col">[book author]</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">ISBN Number</div>
+                                <div class="col-1">:</div>
+                                <div class="col">[isbn number]</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Publishing House</div>
+                                <div class="col-1">:</div>
+                                <div class="col">[publishing house]</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Genre</div>
+                                <div class="col-1">:</div>
+                                <div class="col">[genre]</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Book Location</div>
+                                <div class="col-1">:</div>
+                                <div class="col">[book location]</div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Book Status</div>
+                                <div class="col-1">:</div>
+                                <div class="col">[book borrowed or not]</div>
+                            </div>
+                          </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Revert back</button>
-                        <input type="submit" class="btn btn-primary" value="Delete">
+                        <input type="submit" class="btn btn-danger" value="Delete">
                     </div>
                 </div>
-            </form>
         </div>
     </div>
     <div class="modal fade" id="addBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addBookLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
             <form method="POST" action="{% url 'add_book' %}">
                 {% csrf_token %}
                 <div class="modal-content">
