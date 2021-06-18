@@ -45,10 +45,9 @@
                 </span>
                 {% endif %}
             </td>
-            <td>
+            <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" 
-                    data-bs-target="#editBook" 
-                    style="width: 5vw; margin-bottom: 1vh;" 
+                    data-bs-target="#editBook"
                     onclick="editBookHandler({
                         pk: '{{ book.pk }}',
                         title: '{{ book.title }}',
@@ -59,7 +58,7 @@
                         book_location: '{{ book.book_location }}',
                         status_borrowed: '{{ book.status_borrowed }}'
                     })">Edit</button>
-                <button type="button" class="btn btn-danger" style="width: 5vw;">Delete</button>
+                <button type="button" class="btn btn-danger">Delete</button>
             </td>
         </tr>
         {% endfor %}
