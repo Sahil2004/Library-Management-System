@@ -1,0 +1,267 @@
+{% extends 'lib_man/components/portal.html' %}
+
+{% block portal %}
+
+<form action='{% url "search_books" %}' method="POST">
+    {% csrf_token %}
+    <div class="d-inline-flex w-100 mb-5 pe-10 justify-content-between">
+        <div class="input-group" style="width: 80%;">
+            {{ search_books_form.keyword }}
+            <div class="input-group-append me-4">
+                <input type="submit" class="input-group-text" id="basic-addon2"value="Search">
+            </div>
+            {{ search_books_form.search_by }}
+        </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBook">New Borrower</button>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Borrower Details</th>
+            <th scope="col">Borrowed Book Details</th>
+            <th scope="col">Issuing Date</th>
+            <th scope="col">Returning Date</th>
+            <th scope="col">Return Due</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <th>{{ forloop.counter }}</th>
+            <td id="title{{ forloop.counter }}">{{ book.title }}</td>
+            <td id="author{{ forloop.counter }}">{{ book.author }}</td>
+            <td id="isbnNo{{ forloop.counter }}">{{ book.isbn }}</td>
+            <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
+            <td id="genre{{ forloop.counter }}">{{ book.genre }}</td>
+            <td id="bookLocation{{ forloop.counter }}">{{ book.book_location }}</td>
+            <td id="statusBorrowed{{ forloop.counter }}">
+                {% if book.status_borrowed == True %}
+                <span class="text-secondary">
+                    Borrowed
+                </span>
+                {% else %}
+                <span class="text-success">
+                    Available
+                </span>
+                {% endif %}
+            </td>
+            {% autoescape on %}
+
+            <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" 
+                    data-bs-target="#editBook"
+                    onclick="editBookHandler('{{ forloop.counter }}', '{{ book.pk }}')">Edit</button>
+                <button type="button" class="btn btn-danger"data-bs-toggle="modal" 
+                    data-bs-target="#deleteBook"
+                    onclick="deleteBookHandler('{{ forloop.counter }}', '{{ book.pk }}')">Delete</button>
+            </td>
+            {% endautoescape %}
+
+        </tr>
+        {% empty %}
+        <tr>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="display: flex; justify-content: center; align-items: center;">
+                No Results Found
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <div class="modal fade" id="editBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editBookLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <form method="POST" action="{% url 'edit_book' %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editBookLabel">Edit Book</h5>
+                    </div>
+                    <div class="modal-body">
+                        {{ edit_book_form.pk }}
+                        <div class="mb-3">
+                            <label for="titleEdit" class="form-label">Book Title</label>
+                            {{ edit_book_form.title }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="authorEdit" class="form-label">Book Author</label>
+                            {{ edit_book_form.author }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="isbnNoEdit" class="form-label">ISBN Number</label>
+                            {{ edit_book_form.isbn }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="pubHouseEdit" class="form-label">Publishing House</label>
+                            {{ edit_book_form.publisher }}                       
+                         </div>
+                        <div class="mb-3">
+                            <label for="genreEdit" class="form-label">Genre</label>
+                            {{ edit_book_form.genre }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="bookLocationEdit" class="form-label">Book Location</label>
+                            {{ edit_book_form.book_location }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="statusBorrowedEdit">The book is borrowed</label>
+                            {{ edit_book_form.status_borrowed}}                        
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard Changes</button>
+                        <input type="submit" class="btn btn-primary" value="Update">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteBookLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <form method="POST" action="{% url 'delete_book' %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteBookLabel">Delete Book</h5>
+                    </div>
+                    <div class="modal-body">
+                        {{ delete_book_form.pk }}
+                        <div class="container-fluid fs-5">
+                            <div class="row mb-2">
+                              <div class="col">Book Title</div>
+                              <div class="col-1">:</div>
+                              <div class="col fw-bold" id="titleDel"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Book Author</div>
+                                <div class="col-1">:</div>
+                                <div class="col fw-bold" id="authorDel"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">ISBN Number</div>
+                                <div class="col-1">:</div>
+                                <div class="col fw-bold" id="isbnNoDel"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Publishing House</div>
+                                <div class="col-1">:</div>
+                                <div class="col fw-bold" id="pubHouseDel"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Genre</div>
+                                <div class="col-1">:</div>
+                                <div class="col fw-bold" id="genreDel"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Book Location</div>
+                                <div class="col-1">:</div>
+                                <div class="col fw-bold" id="bookLocationDel"></div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col">Book Status</div>
+                                <div class="col-1">:</div>
+                                <div class="col fw-bold" id="statusBorrowedDel"></div>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Revert</button>
+                        <input type="submit" class="btn btn-danger" value="Delete">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="addBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addBookLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <form method="POST" action="{% url 'add_book' %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addBookLabel">Edit Book</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="titleAdd" class="form-label">Book Title</label>
+                            {{ add_book_form.title }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="authorAdd" class="form-label">Book Author</label>
+                            {{ add_book_form.author }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="ISBNnoAdd" class="form-label">ISBN Number</label>
+                            {{ add_book_form.isbn }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="pubHouseAdd" class="form-label">Publishing House</label>
+                            {{ add_book_form.publisher }}                       
+                         </div>
+                        <div class="mb-3">
+                            <label for="genreAdd" class="form-label">Genre</label>
+                            {{ add_book_form.genre }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label for="bookLocationAdd" class="form-label">Book Location</label>
+                            {{ add_book_form.book_location }}                        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="statusBorrowedAdd">The book is borrowed</label>
+                            {{ add_book_form.status_borrowed}}                        
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
+                        <input type="submit" class="btn btn-primary" value="Add">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</table>
+<script>
+    const editBookHandler = (rowNum, id) => {
+        document.getElementById('primaryKeyEdit').value = id
+        document.getElementById('titleEdit').value = document.getElementById('title'+rowNum).innerHTML
+        document.getElementById('authorEdit').value = document.getElementById('author'+rowNum).innerHTML
+        document.getElementById('genreEdit').value = document.getElementById('genre'+rowNum).innerHTML
+        document.getElementById('isbnNoEdit').value = document.getElementById('isbnNo'+rowNum).innerHTML
+        document.getElementById('pubHouseEdit').value = document.getElementById('pubHouse'+rowNum).innerHTML
+        document.getElementById('bookLocationEdit').value = document.getElementById('bookLocation'+rowNum).innerHTML
+        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") 
+            document.getElementById('statusBorrowedEdit').checked = true
+        else
+            document.getElementById('statusBorrowedEdit').checked = false
+    }
+    const deleteBookHandler = (rowNum, id) => {
+        document.getElementById('primaryKeyDel').value = id
+        document.getElementById('titleDel').innerHTML = document.getElementById('title'+rowNum).innerHTML
+        document.getElementById('authorDel').innerHTML = document.getElementById('author'+rowNum).innerHTML
+        document.getElementById('genreDel').innerHTML = document.getElementById('genre'+rowNum).innerHTML
+        document.getElementById('isbnNoDel').innerHTML = document.getElementById('isbnNo'+rowNum).innerHTML
+        document.getElementById('pubHouseDel').innerHTML = document.getElementById('pubHouse'+rowNum).innerHTML
+        document.getElementById('bookLocationDel').innerHTML = document.getElementById('bookLocation'+rowNum).innerHTML
+        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") {
+            document.getElementById('statusBorrowedDel').innerHTML = "Borrowed"
+            document.getElementById('statusBorrowedDel').classList.add('text-secondary')
+        }
+        else {
+            document.getElementById('statusBorrowedDel').innerHTML = "Available"
+            document.getElementById('statusBorrowedDel').classList.add('text-success')
+        }
+    }
+
+</script>            
+
+
+<script src="https://cdn.jsdelivr.net/npm/underscore@1.13.1/underscore-umd-min.js"></script>
+{% endblock %}

@@ -5,14 +5,13 @@
 <form action='{% url "search_books" %}' method="POST">
     {% csrf_token %}
     <div class="d-inline-flex w-100 mb-5 pe-10 justify-content-between">
-            <div class="input-group w-75 ">
-                    {{ search_books_form.keyword }}
-                    <div class="input-group-append">
-                        <input type="submit" class="input-group-text" id="basic-addon2" value="Search">
-                    </div>
-                    {{ search_books_form.search_by }}
+        <div class="input-group" style="width: 80%;">
+            {{ search_books_form.keyword }}
+            <div class="input-group-append me-4">
+                <input type="submit" class="input-group-text" id="basic-addon2"value="Search">
             </div>
-
+            {{ search_books_form.search_by }}
+        </div>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBook">Add a book</button>
     </div>
 </form>
@@ -41,7 +40,7 @@
             <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
             <td id="genre{{ forloop.counter }}">{{ book.genre }}</td>
             <td id="bookLocation{{ forloop.counter }}">{{ book.book_location }}</td>
-            <td id="statusBorrowed{{ forloop.counter }}">
+            <td id="statusBorrowed{{ forloop.counter >
                 {% if book.status_borrowed == True %}
                 <span class="text-secondary">
                     Borrowed
@@ -67,9 +66,17 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan='6' style="display: flex; justify-content: center; align-items: center;">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="display: flex; justify-content: center; align-items: center;">
                 No Results Found
             </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         {% endfor %}
     </tbody>

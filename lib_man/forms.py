@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.fields import MultipleChoiceField
 from .models import Book
 
 class LoginForm(forms.Form):
@@ -170,6 +171,12 @@ class SearchBooksForm(forms.Form):
             ('Publishing House', 'Publishing House'), 
             ('Genre', 'Genre'), 
             ('Book Location', 'Book Location'), 
-            ('Status', 'Status')
-        ))
+            ('Status', 'Status'),
+        )),
+        widget = forms.Select(
+            attrs={
+                'class':'form-select',
+                'style': 'max-width: 20%;'
+            }
+        )
     )
