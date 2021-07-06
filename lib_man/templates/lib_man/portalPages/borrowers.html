@@ -12,7 +12,7 @@
             </div>
             {{ search_books_form.search_by }}
         </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBook">New Borrower</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBorrower">New Borrower</button>
     </div>
 </form>
 
@@ -84,7 +84,7 @@
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editBookLabel">Edit Book</h5>
+                        <h5 class="modal-title" id="editBookLabel">Edit Borrower</h5>
                     </div>
                     <div class="modal-body">
                         {{ edit_book_form.pk }}
@@ -131,7 +131,7 @@
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteBookLabel">Delete Book</h5>
+                        <h5 class="modal-title" id="deleteBookLabel">Delete Borrower</h5>
                     </div>
                     <div class="modal-body">
                         {{ delete_book_form.pk }}
@@ -181,42 +181,44 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="addBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addBookLabel" aria-hidden="true">
+    <div class="modal fade" id="addBorrower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addBookLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
             <form method="POST" action="{% url 'add_book' %}">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addBookLabel">Edit Book</h5>
+                        <h5 class="modal-title" id="addBookLabel">New Borrower</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="titleAdd" class="form-label">Book Title</label>
+                            <label for="BorrowerDetails" class="form-label">Borrower Details</label>
                             {{ add_book_form.title }}
                         </div>
                         <div class="mb-3">
-                            <label for="authorAdd" class="form-label">Book Author</label>
-                            {{ add_book_form.author }}                        
+                            <label for="BorrowedBookDetails">Borrowed Book Details</label>
+                            <input type="text" id="BorrowedBookDetailsInput" class="form-control" autocomplete="off" onkeyup="dynamicSearch();displaySearchElems()" placeholder="Search for names.." title="Type in a name">
+                            <!--Style the above input[type=text] like other inputs. I forgot the classes I used. -->
+                            <ul id="dynamicSearchList" class="list-group list-group-flush" style="display: none;list-style: none; overflow-y: scroll; max-height: 20vh;">
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Adele')">Adele</a></li> <!--Use the same onclick function on all elements-->
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Agnes')">Agnes</a></li>                         
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Billy')">Billy</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Bob')">Bob</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Calvin')">Calvin</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Christina')">Christina</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Cindy')">Cindy</a></li>
+                            </ul>
                         </div>
                         <div class="mb-3">
-                            <label for="ISBNnoAdd" class="form-label">ISBN Number</label>
+                            <label for="IssuingDate" class="form-label">Issuing Date</label>
                             {{ add_book_form.isbn }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="pubHouseAdd" class="form-label">Publishing House</label>
+                            <label for="ReturningDate" class="form-label">Returning Date</label>
                             {{ add_book_form.publisher }}                       
                          </div>
                         <div class="mb-3">
-                            <label for="genreAdd" class="form-label">Genre</label>
+                            <label for="ReturnDue" class="form-label">Return Due</label>
                             {{ add_book_form.genre }}                        
-                        </div>
-                        <div class="mb-3">
-                            <label for="bookLocationAdd" class="form-label">Book Location</label>
-                            {{ add_book_form.book_location }}                        
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-check-label" for="statusBorrowedAdd">The book is borrowed</label>
-                            {{ add_book_form.status_borrowed}}                        
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -229,6 +231,29 @@
     </div>
 </table>
 <script>
+    const displaySearchElems = () => {
+        document.getElementById("dynamicSearchList").style.display = "block";
+    }
+    const insertContent = x => {
+        document.getElementById("BorrowedBookDetailsInput").value = x;
+        document.getElementById("dynamicSearchList").style.display = "none";
+    }
+    const dynamicSearch = () => {
+        var input, filter, ul, li, a, i, txtValue;
+        input = document.getElementById("BorrowedBookDetailsInput");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("dynamicSearchList");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
+    }
     const editBookHandler = (rowNum, id) => {
         document.getElementById('primaryKeyEdit').value = id
         document.getElementById('titleEdit').value = document.getElementById('title'+rowNum).innerHTML
