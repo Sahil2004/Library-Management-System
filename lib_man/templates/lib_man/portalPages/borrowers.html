@@ -36,16 +36,14 @@
             <td id="author{{ forloop.counter }}">{{ book.author }}</td>
             <td id="isbnNo{{ forloop.counter }}">{{ book.isbn }}</td>
             <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
-            <td id="genre{{ forloop.counter }}">{{ book.genre }}</td>
-            <td id="bookLocation{{ forloop.counter }}">{{ book.book_location }}</td>
             <td id="statusBorrowed{{ forloop.counter }}">
                 {% if book.status_borrowed == True %}
                 <span class="text-secondary">
-                    Borrowed
+                    Yes
                 </span>
                 {% else %}
                 <span class="text-success">
-                    Available
+                    No
                 </span>
                 {% endif %}
             </td>
@@ -64,30 +62,6 @@
         </tr>
         {% empty %}
         <tr>
-        </tr>
-        <tr>
-            <td class="id"> 1</td>
-            <td class="Borrower Details">Some borrower details</td>
-            <td class="Borrower Details">Book borrowed details</td>
-            <td class="Borrower Details">Issuing Date</td>
-            <td class="Borrower Details">Returning Date</td>
-            <td>
-                <span class="text-secondary">
-                    Yes
-                </span>
-                <span class="text-success">
-                    No
-                </span>
-            </td>
-            <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" 
-                    data-bs-target="#editBorrower"
-                    onclick="editBorrowerHandler('{{ forloop.counter }}', '{{ book.pk }}')">Edit</button>
-                <button type="button" class="btn btn-danger"data-bs-toggle="modal" 
-                    data-bs-target="#deleteBorrower"
-                    onclick="deleteBookHandler('{{ forloop.counter }}', '{{ book.pk }}')">Delete</button>
-            </td>
-
         </tr>
         <tr>
             <td></td>
