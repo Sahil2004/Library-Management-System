@@ -1,6 +1,7 @@
 from django import forms
 from django.forms.fields import MultipleChoiceField
 from .models import Book
+from .models import Borrower
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(
@@ -180,3 +181,73 @@ class SearchBooksForm(forms.Form):
             }
         )
     )
+
+
+#Borrower Forms    
+class EditBorrowerForm(forms.ModelForm):
+    class Meta:
+        model = Borrower
+        fields = '__all__'
+    pk = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'style': 'display: none',
+            'id': "primaryKeyEdit"
+        }
+    ))
+    name = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': "Enter borrower's name",
+            'id': 'nameEdit'
+        }
+    ))
+    adm_no = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '10',
+            'placeholder': "Enter borrower's admission number: ",
+            'id': 'admEdit'
+        }
+    ))
+    _class = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '2',
+            'placeholder': "Enter borrower's class: ",
+            'id': '_classEdit'
+        }
+    ))
+    section = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '1',
+            'placeholder': "Enter borrower's section",
+            'id': 'sectionEdit'
+        }
+    ))
+    roll_no = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '1',
+            'placeholder': "Enter borrower's roll number: ",
+            'id': 'rollEdit'
+        }
+    ))
+    contact_no = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'class': 'form-control',
+            'minlength': '1111111111',
+            'maxlength': '9999999999',
+            'placeholder': "Enter borrower's contact number",
+            'id': 'contactEdit'
+        }
+    ))
+
+
+    
+
+
+
+
+    

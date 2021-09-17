@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime, timedelta
 
@@ -42,6 +42,7 @@ class Borrower(models.Model):
             MinValueValidator(1111111111)
         ]
     )
+    
     book_borrowed = models.ForeignKey(Book, on_delete=models.CASCADE)
     date_borrowed = models.DateField(default=datetime.today)
     date_due = models.DateField(default=get_due_date())

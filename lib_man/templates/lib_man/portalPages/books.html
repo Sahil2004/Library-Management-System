@@ -40,7 +40,7 @@
             <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
             <td id="genre{{ forloop.counter }}">{{ book.genre }}</td>
             <td id="bookLocation{{ forloop.counter }}">{{ book.book_location }}</td>
-            <td id="statusBorrowed{{ forloop.counter >
+            <td id="statusBorrowed{{ forloop.counter }}">
                 {% if book.status_borrowed == True %}
                 <span class="text-secondary">
                     Borrowed

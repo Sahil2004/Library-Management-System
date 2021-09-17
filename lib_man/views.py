@@ -6,9 +6,10 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from .models import Book, Borrower
 from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm, SearchBooksForm
+from .forms import EditBorrowerForm
 
 
-def search_results(keyword, search_by):
+def search_books_results(keyword, search_by):
     if search_by == 'Book Title':
         return Book.objects.filter(Q(title__icontains=keyword))
     if search_by == 'Book Author':
@@ -27,6 +28,24 @@ def search_results(keyword, search_by):
         else:
             status = keyword.upper() == 'BORROWED'
             return Book.objects.filter(status_borrowed=status)
+
+def search_borrowers_results(keyword, search_by):
+    if search_by == 'Name':
+        return Borrower.objects.filter(Q(name__icontains=keyword))
+    if search_by == 'Admission Number':
+        return Borrower.objects.filter(Q(adm_no__icontains=keyword))
+    if search_by == 'Class':
+        return Borrower.objects.filter(Q(_class__icontains=keyword))
+    if search_by == 'Section':
+        return Borrower.objects.filter(Q(section__icontains=keyword))
+    if search_by == 'Roll Number':
+        return Borrower.objects.filter(Q(roll_no__icontains=keyword))
+    if search_by == 'Contact Number':
+        return Borrower.ojects.filter(Q(contact_no__icontains=keyword))
+    if search_by == 'Book Borrowed':
+        return Borrower.objects.filter(Q(book_borrowed__icontains=keyword))
+
+
 
 # Pages
 
@@ -69,7 +88,7 @@ def books(request):
         }
     else:
         context = {
-            'books': search_results(request.GET.get('keyword'), request.GET.get('search_by')),
+            'books': search_books_results(request.GET.get('keyword'), request.GET.get('search_by')),
             'edit_book_form': EditBookForm(),
             'add_book_form': AddBookForm(),
             'delete_book_form': DeleteBookForm(),
@@ -79,15 +98,54 @@ def books(request):
     return render(request, 'lib_man/portalPages/books.html', context)
 
 
-
 @login_required(login_url='login')
 def borrowers(request):
-    context = {
-        'borrowers': Borrower.objects.all()
-    }
-    return render(request, 'lib_man/portalPages/borrowers.html', context)
+    context = {}
+    if not request.GET:
+        context = {
+            'borrowers': Borrower.objects.all(),
+            'edit_borrower_form': EditBorrowerForm(),
+            'add_book_form': AddBookForm(),
+            'delete_book_form': DeleteBookForm(),
+            'search_books_form': SearchBooksForm()
+        
+        }
+    else:
+        context = {
+            'books': search_books_results(request.GET.get('keyword'), request.GET.get('search_by')),
+            'edit_book_form': EditBookForm(),
+            'add_book_form': AddBookForm(),
+            'delete_book_form': DeleteBookForm(),
+            'search_books_form': SearchBooksForm()
+       }
+
+    return render(request, 'lib_man/portalPages/books.html', context)
 
 
+'''
+@login_required(login_url='login')
+def borrowers(request):
+    context = {}
+    if not request.GET:
+        context = {
+            'borrowers': Borrower.objects.all(),
+            'edit_borrower_form': EditBorrowerForm(),
+            'add_borrower_form': AddBorrowerForm(),
+            'delete_borrower_form': DeleteBorrowerForm(),
+            'search_borrower_form': SearchBorrowerForm()
+        
+        }
+    else:
+        context = {
+            'borrowers': search_borrowers_results(request.GET.get('keyword'), request.GET.get('search_by')),
+            'edit_book_form': EditBorrowerForm(),
+            'add_borrower_form': AddBorrowerForm(),
+            'delete_borrower_form': DeleteBorrowerForm(),
+            'search_borrower_form': SearchBorrowerForm()
+        }
+
+    return render(request, 'lib_man/portalPages/books.html', context)
+'''
 
 @login_required(login_url='login')
 def borrowed_books(request):
@@ -151,3 +209,10 @@ def search_books(request):
     query_string =  urlencode({'search_by': request.POST.get('search_by'), 'keyword': request.POST.get('keyword')})
     url = '{}?{}'.format(base_url, query_string)
     return redirect(url)
+
+def search_borrowers(request):
+    base_url = reverse('borrowers')
+    query_string =  urlencode({'search_by': request.POST.get('search_by'), 'keyword': request.POST.get('keyword')})
+    url = '{}?{}'.format(base_url, query_string)
+    return redirect(url)
+    

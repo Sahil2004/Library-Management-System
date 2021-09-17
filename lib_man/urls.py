@@ -17,7 +17,9 @@ urlpatterns = [
     path('edit_book', views.edit_book, name="edit_book"),
     path('add_book', views.add_book, name="add_book"),
     path('delete_book', views.delete_book, name="delete_book"),
-    path('search_books', views.search_books, name="search_books")
+    path('search_books', views.search_books, name="search_books"),
+    path('search_borrowers', views.search_borrowers, name="search_borrowers")
+    
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -2,7 +2,7 @@
 
 {% block portal %}
 
-<form action='{% url "search_books" %}' method="POST">
+<form action='{% url "search_borrowers" %}' method="POST">
     {% csrf_token %}
     <div class="d-inline-flex w-100 mb-5 pe-10 justify-content-between">
         <div class="input-group" style="width: 80%;">
@@ -10,7 +10,7 @@
             <div class="input-group-append me-4">
                 <input type="submit" class="input-group-text" id="basic-addon2"value="Search">
             </div>
-            {{ search_books_form.search_by }}
+            {{ search_borrower_form.search_by }}
         </div>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBorrower">New Borrower</button>
     </div>
