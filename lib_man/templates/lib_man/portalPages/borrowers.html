@@ -32,6 +32,7 @@
         {% for borrower in borrowers %}
         <tr>
             <th>{{ forloop.counter }}</th>
+<<<<<<< HEAD
             <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
             <td id="author{{ forloop.counter }}">{{ borrower.name }}</td>
             <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
@@ -39,15 +40,32 @@
             <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
             <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
             
+=======
+            <td id="title{{ forloop.counter }}">{{ book.title }}</td>
+            <td id="author{{ forloop.counter }}">{{ book.author }}</td>
+            <td id="isbnNo{{ forloop.counter }}">{{ book.isbn }}</td>
+            <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
+            <td id="statusBorrowed{{ forloop.counter }}">
+                {% if book.status_borrowed == True %}
+                <span class="text-secondary">
+                    Yes
+                </span>
+                {% else %}
+                <span class="text-success">
+                    No
+                </span>
+                {% endif %}
+            </td>
+>>>>>>> 124121a3c252111b2ea635541e1d0f00a4e35b60
             {% autoescape on %}
 
             <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" 
-                    data-bs-target="#editBook"
-                    onclick="editBookHandler('{{ forloop.counter }}', '{{ book.pk }}')">Edit</button>
+                    data-bs-target="#editBorrower"
+                    onclick="editBorrowerHandler('{{ forloop.counter }}', '{{ book.pk }}')">Edit</button>
                 <button type="button" class="btn btn-danger"data-bs-toggle="modal" 
-                    data-bs-target="#deleteBook"
-                    onclick="deleteBookHandler('{{ forloop.counter }}', '{{ book.pk }}')">Delete</button>
+                    data-bs-target="#deleteBorrower"
+                    onclick="deleteBorrowerHandler('{{ forloop.counter }}', '{{ book.pk }}')">Delete</button>
             </td>
             {% endautoescape %}
 
@@ -68,7 +86,7 @@
         </tr>
         {% endfor %}
     </tbody>
-    <div class="modal fade" id="editBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editBookLabel" aria-hidden="true">
+    <div class="modal fade" id="editBorrower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editBookLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
             <form method="POST" action="{% url 'edit_book' %}">
                 {% csrf_token %}
@@ -79,31 +97,32 @@
                     <div class="modal-body">
                         {{ edit_book_form.pk }}
                         <div class="mb-3">
-                            <label for="titleEdit" class="form-label">Book Title</label>
+                            <label for="titleEdit" class="form-label">Borrower Details</label>
                             {{ edit_book_form.title }}
                         </div>
                         <div class="mb-3">
-                            <label for="authorEdit" class="form-label">Book Author</label>
-                            {{ edit_book_form.author }}                        
+                            <label for="authorEdit" class="form-label">Borrowed Book Details</label>
+                            <input type="text" id="BorrowedBookDetailsInput" class="form-control" autocomplete="off" onkeyup="dynamicSearch();displaySearchElems()" placeholder="Search for names.." title="Type in a name">
+                            <ul id="dynamicSearchList" class="list-group list-group-flush" style="display: none;list-style: none; overflow-y: scroll; max-height: 20vh;">
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Adele')">Adele</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Agnes')">Agnes</a></li>                         
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Billy')">Billy</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Bob')">Bob</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Calvin')">Calvin</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Christina')">Christina</a></li>
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Cindy')">Cindy</a></li>
+                            </ul>                        
                         </div>
                         <div class="mb-3">
-                            <label for="isbnNoEdit" class="form-label">ISBN Number</label>
+                            <label for="isbnNoEdit" class="form-label">Issuing Date</label>
                             {{ edit_book_form.isbn }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="pubHouseEdit" class="form-label">Publishing House</label>
+                            <label for="pubHouseEdit" class="form-label">Returning Date</label>
                             {{ edit_book_form.publisher }}                       
-                         </div>
-                        <div class="mb-3">
-                            <label for="genreEdit" class="form-label">Genre</label>
-                            {{ edit_book_form.genre }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="bookLocationEdit" class="form-label">Book Location</label>
-                            {{ edit_book_form.book_location }}                        
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-check-label" for="statusBorrowedEdit">The book is borrowed</label>
+                            <label class="form-check-label" for="statusBorrowedEdit">Return Due</label>
                             {{ edit_book_form.status_borrowed}}                        
                         </div>
                     </div>
@@ -115,7 +134,7 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="deleteBook" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteBookLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteBorrower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteBookLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
             <form method="POST" action="{% url 'delete_book' %}">
                 {% csrf_token %}
@@ -127,37 +146,27 @@
                         {{ delete_book_form.pk }}
                         <div class="container-fluid fs-5">
                             <div class="row mb-2">
-                              <div class="col">Book Title</div>
+                              <div class="col">Borrower Details</div>
                               <div class="col-1">:</div>
                               <div class="col fw-bold" id="titleDel"></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col">Book Author</div>
+                                <div class="col">Borrowed Book Details</div>
                                 <div class="col-1">:</div>
                                 <div class="col fw-bold" id="authorDel"></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col">ISBN Number</div>
+                                <div class="col">Issuing Date</div>
                                 <div class="col-1">:</div>
                                 <div class="col fw-bold" id="isbnNoDel"></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col">Publishing House</div>
+                                <div class="col">Returning Date</div>
                                 <div class="col-1">:</div>
                                 <div class="col fw-bold" id="pubHouseDel"></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col">Genre</div>
-                                <div class="col-1">:</div>
-                                <div class="col fw-bold" id="genreDel"></div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col">Book Location</div>
-                                <div class="col-1">:</div>
-                                <div class="col fw-bold" id="bookLocationDel"></div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col">Book Status</div>
+                                <div class="col">Return Due</div>
                                 <div class="col-1">:</div>
                                 <div class="col fw-bold" id="statusBorrowedDel"></div>
                             </div>
@@ -187,9 +196,8 @@
                         <div class="mb-3">
                             <label for="BorrowedBookDetails">Borrowed Book Details</label>
                             <input type="text" id="BorrowedBookDetailsInput" class="form-control" autocomplete="off" onkeyup="dynamicSearch();displaySearchElems()" placeholder="Search for names.." title="Type in a name">
-                            <!--Style the above input[type=text] like other inputs. I forgot the classes I used. -->
                             <ul id="dynamicSearchList" class="list-group list-group-flush" style="display: none;list-style: none; overflow-y: scroll; max-height: 20vh;">
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Adele')">Adele</a></li> <!--Use the same onclick function on all elements-->
+                                <li><a href="#" class="list-group-item" onclick="insertContent('Adele')">Adele</a></li>
                                 <li><a href="#" class="list-group-item" onclick="insertContent('Agnes')">Agnes</a></li>                         
                                 <li><a href="#" class="list-group-item" onclick="insertContent('Billy')">Billy</a></li>
                                 <li><a href="#" class="list-group-item" onclick="insertContent('Bob')">Bob</a></li>
@@ -244,7 +252,7 @@
             }
         }
     }
-    const editBookHandler = (rowNum, id) => {
+    const editBorrowerHandler = (rowNum, id) => {
         document.getElementById('primaryKeyEdit').value = id
         document.getElementById('titleEdit').value = document.getElementById('title'+rowNum).innerHTML
         document.getElementById('authorEdit').value = document.getElementById('author'+rowNum).innerHTML
@@ -257,7 +265,7 @@
         else
             document.getElementById('statusBorrowedEdit').checked = false
     }
-    const deleteBookHandler = (rowNum, id) => {
+    const deleteBorrowerHandler = (rowNum, id) => {
         document.getElementById('primaryKeyDel').value = id
         document.getElementById('titleDel').innerHTML = document.getElementById('title'+rowNum).innerHTML
         document.getElementById('authorDel').innerHTML = document.getElementById('author'+rowNum).innerHTML

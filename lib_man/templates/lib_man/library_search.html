@@ -1,26 +1,60 @@
 {% extends 'lib_man/components/headerAndFooter.html' %}
     
 {% block headerAndFooter %}
-    <div class="input-group mt-5 mb-5 w-50 mx-auto">
+<div style="display: grid;">
+    <div class="input-group my-5 w-50 mx-auto">
         <input type="text" class="form-control" placeholder="Search" aria-label="Search"aria-describedby="basic-addon2" autofocus tabindex="1">
         <div class="input-group-append">
             <span class="input-group-text" style="cursor: no-drop;" id="basic-addon2">Search</span>
         </div>
     </div>
-    <div class="cards mx-5">
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">Book name</h5> <!-- ! Change the book name to the real book name using js-->
-                <h6 class="card-subtitle mb-2 text-muted">Author: <span>Author name</span></h6>
-                <p>
-                    Genre: <span>Genre</span>
-                    <br />
-                    Borrowed: <span>yes/no</span>
-                    <br />
-                    Book location: <span>location</span>
-                </p>
-                <!-- ! Change the respective fields in the span tags from JS --> 
-            </div>
-          </div>
+    <div class="px-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        Book Name
+                    </th>
+                    <th scope="col">
+                        Author
+                    </th>
+                    <th scope="col">
+                        Genre
+                    </th>
+                    <th scope="col">
+                        Borrowed
+                    </th>
+                    <th scope="col">
+                        Book Location
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td scope="col">
+                        Something
+                    </td>
+                    <td scope="col">
+                        Something
+                    </td>
+                    <td scope="col">
+                        Something
+                    </td>
+                    <td scope="col">
+                        Something
+                    </td>
+                    <td scope="col">
+                        Something
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5" style="text-align: center;">
+                        No Results Found
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+</div>
+    
 {% endblock %}
