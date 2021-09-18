@@ -6,7 +6,7 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from .models import Book, Borrower
 from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm, SearchBooksForm
-from .forms import EditBorrowerForm, AddBorrowerForm, DeleteBorrowerForm, SearchBorrowerForm
+from .forms import EditBorrowerForm
 
 
 def search_books_results(keyword, search_by):
@@ -112,14 +112,14 @@ def borrowers(request):
         }
     else:
         context = {
-            'books': search_books_results(request.GET.get('keyword'), request.GET.get('search_by')),
+            'books': search_borrowers_results(request.GET.get('keyword'), request.GET.get('search_by')),
             'edit_book_form': EditBookForm(),
             'add_book_form': AddBookForm(),
             'delete_book_form': DeleteBookForm(),
             'search_books_form': SearchBooksForm()
        }
 
-    return render(request, 'lib_man/portalPages/books.html', context)
+    return render(request, 'lib_man/portalPages/borrowers.html', context)
 
 
 '''

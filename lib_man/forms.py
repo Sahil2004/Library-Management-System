@@ -244,14 +244,9 @@ class EditBorrowerForm(forms.ModelForm):
         }
     ))
 
-    book_borrowed = forms.CharField(widget = forms.TextInput(
-        attrs = {
-            'class' : 'form-control',
-             
-
-        }
-    
-    ))
+    book_borrowed = forms.CharField(label = 'Book Borrowed',
+        widget = forms.Select(choices = Book.objects.all()) 
+    )
 
 
     

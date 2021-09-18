@@ -29,26 +29,16 @@
         </tr>
     </thead>
     <tbody>
-        {% for book in books %}
+        {% for borrower in borrowers %}
         <tr>
             <th>{{ forloop.counter }}</th>
-            <td id="title{{ forloop.counter }}">{{ book.title }}</td>
-            <td id="author{{ forloop.counter }}">{{ book.author }}</td>
-            <td id="isbnNo{{ forloop.counter }}">{{ book.isbn }}</td>
-            <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
-            <td id="genre{{ forloop.counter }}">{{ book.genre }}</td>
-            <td id="bookLocation{{ forloop.counter }}">{{ book.book_location }}</td>
-            <td id="statusBorrowed{{ forloop.counter }}">
-                {% if book.status_borrowed == True %}
-                <span class="text-secondary">
-                    Borrowed
-                </span>
-                {% else %}
-                <span class="text-success">
-                    Available
-                </span>
-                {% endif %}
-            </td>
+            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
+            <td id="author{{ forloop.counter }}">{{ borrower.name }}</td>
+            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
+            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
+            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
+            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
+            
             {% autoescape on %}
 
             <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
