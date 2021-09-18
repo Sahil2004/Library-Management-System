@@ -6,7 +6,7 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from .models import Book, Borrower
 from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm, SearchBooksForm
-from .forms import EditBorrowerForm
+from .forms import EditBorrowerForm, AddBorrowerForm, DeleteBorrowerForm, SearchBorrowerForm
 
 
 def search_books_results(keyword, search_by):
