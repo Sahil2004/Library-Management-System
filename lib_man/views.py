@@ -7,6 +7,15 @@ from urllib.parse import urlencode
 from .models import Book, Borrower
 from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm, SearchBooksForm
 from .forms import EditBorrowerForm
+from django import template
+
+#For Borrower field "_class"
+register = template.Library()
+
+@register.simple_tag
+def underscoreTag(obj, attribute):
+    obj = dict(obj)
+    return obj.get(attribute)
 
 
 def search_books_results(keyword, search_by):
@@ -35,11 +44,11 @@ def search_borrowers_results(keyword, search_by):
     if search_by == 'Admission Number':
         return Borrower.objects.filter(Q(adm_no__icontains=keyword))
     if search_by == 'Class':
-        return Borrower.objects.filter(Q(_class__icontains=keyword))
+        return Borrower.objects.filter(Q(_class=keyword))
     if search_by == 'Section':
-        return Borrower.objects.filter(Q(section__icontains=keyword))
+        return Borrower.objects.filter(Q(section=keyword))
     if search_by == 'Roll Number':
-        return Borrower.objects.filter(Q(roll_no__icontains=keyword))
+        return Borrower.objects.filter(Q(roll_no=keyword))
     if search_by == 'Contact Number':
         return Borrower.ojects.filter(Q(contact_no__icontains=keyword))
     if search_by == 'Book Borrowed':

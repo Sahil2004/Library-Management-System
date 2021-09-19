@@ -29,18 +29,21 @@
         </tr>
     </thead>
     <tbody>
+        {% load tagger %}
+     
+        <td>{% underscoreTag order "borrower._class" as class %} {{ id }}</td> 
+
+    
         {% for borrower in borrowers %}
         <tr>
             <th>{{ forloop.counter }}</th>
-<<<<<<< HEAD
             <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
-            <td id="author{{ forloop.counter }}">{{ borrower.name }}</td>
-            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
-            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
-            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
-            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
+            <td id="title{{ forloop.counter }}">{{ borrower.adm_no }}</td>
+            <td id="title{{ forloop.counter }}">{{class}}</td>
+            <td id="title{{ forloop.counter }}">{{ borrower.section }}</td>
+            <td id="title{{ forloop.counter }}">{{ borrower.roll_no}}</td>
+            <td id="title{{ forloop.counter }}">{{ borrower.contact_no }}</td>
             
-=======
             <td id="title{{ forloop.counter }}">{{ book.title }}</td>
             <td id="author{{ forloop.counter }}">{{ book.author }}</td>
             <td id="isbnNo{{ forloop.counter }}">{{ book.isbn }}</td>
@@ -56,7 +59,6 @@
                 </span>
                 {% endif %}
             </td>
->>>>>>> 124121a3c252111b2ea635541e1d0f00a4e35b60
             {% autoescape on %}
 
             <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
