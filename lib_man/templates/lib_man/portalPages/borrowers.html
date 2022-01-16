@@ -6,11 +6,11 @@
     {% csrf_token %}
     <div class="d-inline-flex w-100 mb-5 pe-10 justify-content-between">
         <div class="input-group" style="width: 80%;">
-            {{ search_books_form.keyword }}
+            {{ search_borrowers_form.keyword }}
             <div class="input-group-append me-4">
                 <input type="submit" class="input-group-text" id="basic-addon2"value="Search">
             </div>
-            {{ search_borrower_form.search_by }}
+            {{ search_borrowers_form.search_by }}
         </div>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBorrower">New Borrower</button>
     </div>
@@ -20,18 +20,19 @@
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Borrower Details</th>
-            <th scope="col">Borrowed Book Details</th>
-            <th scope="col">Issuing Date</th>
-            <th scope="col">Returning Date</th>
-            <th scope="col">Return Due</th>
+            <th scope="col">Name</th>
+            <th scope="col">Admission Number</th>
+            <th scope="col">Class</th>
+            <th scope="col">Section</th>
+            <th scope="col">Roll Number</th>
+            <th scope="col">Contact Number</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
         {% load tagger %}
      
-        <td>{% underscoreTag order "borrower._class" as class %} {{ id }}</td> 
+        <td>{% underscoreTag order "borrower._class" as borrower.class %} {{ borrower.class }}</td> 
 
     
         {% for borrower in borrowers %}
@@ -39,16 +40,10 @@
             <th>{{ forloop.counter }}</th>
             <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
             <td id="title{{ forloop.counter }}">{{ borrower.adm_no }}</td>
-            <td id="title{{ forloop.counter }}">{{class}}</td>
+            <td id="title{{ forloop.counter }}">{{borrower.class}}</td>
             <td id="title{{ forloop.counter }}">{{ borrower.section }}</td>
             <td id="title{{ forloop.counter }}">{{ borrower.roll_no}}</td>
             <td id="title{{ forloop.counter }}">{{ borrower.contact_no }}</td>
-            
-            <td id="title{{ forloop.counter }}">{{ book.title }}</td>
-            <td id="author{{ forloop.counter }}">{{ book.author }}</td>
-            <td id="isbnNo{{ forloop.counter }}">{{ book.isbn }}</td>
-            <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
-            <td id="statusBorrowed{{ forloop.counter }}">
                 {% if book.status_borrowed == True %}
                 <span class="text-secondary">
                     Yes
@@ -99,12 +94,12 @@
                     <div class="modal-body">
                         {{ edit_book_form.pk }}
                         <div class="mb-3">
-                            <label for="titleEdit" class="form-label">Borrower Details</label>
+                            <label for="titleEdit" class="form-label">Name</label>
                             {{ edit_book_form.title }}
                         </div>
                         <div class="mb-3">
-                            <label for="authorEdit" class="form-label">Borrowed Book Details</label>
-                            <input type="text" id="BorrowedBookDetailsInput" class="form-control" autocomplete="off" onkeyup="dynamicSearch();displaySearchElems()" placeholder="Search for names.." title="Type in a name">
+                            <label for="bookBorrowedEdit" class="form-label">Book Borrowed</label>
+                            <input type="text" id="BorrowedBookDetailsInput" class="form-control" autocomplete="off" onkeyup="dynamicSearch();displaySearchElems()" placeholder="Search book's title" title="Type in a name">
                             <ul id="dynamicSearchList" class="list-group list-group-flush" style="display: none;list-style: none; overflow-y: scroll; max-height: 20vh;">
                                 <li><a href="#" class="list-group-item" onclick="insertContent('Adele')">Adele</a></li>
                                 <li><a href="#" class="list-group-item" onclick="insertContent('Agnes')">Agnes</a></li>                         
@@ -116,16 +111,24 @@
                             </ul>                        
                         </div>
                         <div class="mb-3">
-                            <label for="isbnNoEdit" class="form-label">Issuing Date</label>
-                            {{ edit_book_form.isbn }}                        
+                            <label for="_classEdit" class="form-label">Class</label>
+                            {{ edit_borrower_form.class }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="pubHouseEdit" class="form-label">Returning Date</label>
-                            {{ edit_book_form.publisher }}                       
+                            <label for="sectionEdit" class="form-label">Setion</label>
+                            {{ edit_borrower_form.section }}                       
                         </div>
                         <div class="mb-3">
-                            <label class="form-check-label" for="statusBorrowedEdit">Return Due</label>
-                            {{ edit_book_form.status_borrowed}}                        
+                            <label class="form-check-label" for="rollEdit">Roll Number</label>
+                            {{ edit_borrower_form.roll_no}}                        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="contactEdit">Contact Number</label>
+                            {{ edit_borrower_form.contact_no}}                        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="admEdit">Admission Number</label>
+                            {{ edit_borrower_form.contact_no}}                        
                         </div>
                     </div>
                     <div class="modal-footer">

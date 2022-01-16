@@ -6,16 +6,9 @@ from django.urls import reverse
 from urllib.parse import urlencode
 from .models import Book, Borrower
 from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm, SearchBooksForm
-from .forms import EditBorrowerForm
-from django import template
+from .forms import EditBorrowerForm, SearchBorrowersForm
+from datetime import datetime
 
-#For Borrower field "_class"
-register = template.Library()
-
-@register.simple_tag
-def underscoreTag(obj, attribute):
-    obj = dict(obj)
-    return obj.get(attribute)
 
 
 def search_books_results(keyword, search_by):
@@ -52,8 +45,14 @@ def search_borrowers_results(keyword, search_by):
     if search_by == 'Contact Number':
         return Borrower.ojects.filter(Q(contact_no__icontains=keyword))
     if search_by == 'Book Borrowed':
-        return Borrower.objects.filter(Q(book_borrowed__icontains=keyword))
-
+        return Borrower.objects.filter(Q(book_borrowed__title__icontains=keyword))
+    if search_by == 'Date Borrowed': 
+        date_to_search = datetime.strptime(keyword, '%b %d %Y')
+        return Borrower.objects.filter(Q(date_borrowed__contains= datetime.date(date_to_search))) 
+    if search_by == 'Date Due': 
+        date_to_search = datetime.strptime(keyword, '%b %d %Y')
+        return Borrower.objects.filter(Q(date_due__contains = datetime.date(date_to_search)))       
+    
 
 
 # Pages
@@ -69,7 +68,7 @@ def login(request):
 def lib_search(request):
     context = {
         'books': Book.objects.all()
-    }
+    }   
     return render(request, 'lib_man/library_search.html', context)
 
 
@@ -116,16 +115,16 @@ def borrowers(request):
             'edit_borrower_form': EditBorrowerForm(),
             'add_book_form': AddBookForm(),
             'delete_book_form': DeleteBookForm(),
-            'search_books_form': SearchBooksForm()
+            'search_borrowers_form': SearchBorrowersForm()
         
         }
     else:
         context = {
-            'books': search_borrowers_results(request.GET.get('keyword'), request.GET.get('search_by')),
+            'borrowers': search_borrowers_results(request.GET.get('keyword'), request.GET.get('search_by')),
             'edit_book_form': EditBookForm(),
             'add_book_form': AddBookForm(),
             'delete_book_form': DeleteBookForm(),
-            'search_books_form': SearchBooksForm()
+            'search_borrowers_form': SearchBorrowersForm()
        }
 
     return render(request, 'lib_man/portalPages/borrowers.html', context)

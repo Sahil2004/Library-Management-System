@@ -184,6 +184,7 @@ class SearchBooksForm(forms.Form):
 
 
 #Borrower Forms    
+
 class EditBorrowerForm(forms.ModelForm):
     class Meta:
         model = Borrower
@@ -234,8 +235,9 @@ class EditBorrowerForm(forms.ModelForm):
             'id': 'rollEdit'
         }
     ))
-    contact_no = forms.IntegerField(widget=forms.NumberInput(
+    contact_no = forms.IntegerField(widget=forms.TextInput(
         attrs={
+            
             'class': 'form-control',
             'minlength': '1111111111',
             'maxlength': '9999999999',
@@ -243,11 +245,45 @@ class EditBorrowerForm(forms.ModelForm):
             'id': 'contactEdit'
         }
     ))
+    choices_books = Book.objects.all()
+    book_borrowed = forms.CharField(label = 'Book Borrowed',widget = forms.Select(choices=choices_books,
+        attrs={
+            'id': 'bookBorrowedEdit'
+                
+        } 
+    ))
 
-    book_borrowed = forms.CharField(label = 'Book Borrowed',
-        widget = forms.Select(choices = Book.objects.all()) 
+class SearchBorrowersForm(forms.Form):
+    keyword = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': 'Search',
+            'aria-label': 'Search',
+            'aria-describedby': 'basic-addon2',
+            'tabindex': '1',
+            'required': ''
+        }
+    ))
+    search_by = forms.ChoiceField(
+        choices=((
+            ('Name', 'Name'), 
+            ('Admission Number','Admission Number'),
+            ('Class','Class'),
+            ('Section','Section'), 
+            ('Roll Number','Roll Number'), 
+            ('Contact Number','Contact Number'), 
+            ('Book Borrowed','Book Borrowed'),
+            ('Date Borrowed','Date Borrowed'),
+            ('Date Due','Date Due')
+        )),
+        widget = forms.Select(
+            attrs={
+                'class':'form-select',
+                'style': 'max-width: 20%;'
+            }
+        )
     )
-
 
     
 
