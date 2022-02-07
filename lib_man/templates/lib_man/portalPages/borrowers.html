@@ -12,7 +12,7 @@
             </div>
             {{ search_borrowers_form.search_by }}
         </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBorrower">New Borrower</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addBorrower">Add Borrower</button>
     </div>
 </form>
 
@@ -22,47 +22,39 @@
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Admission Number</th>
-            <th scope="col">Class</th>
+            <th scope="col">Grade</th>
             <th scope="col">Section</th>
             <th scope="col">Roll Number</th>
             <th scope="col">Contact Number</th>
+            <th scope="col">Book Borrowed</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
-        {% load tagger %}
-     
-        <td>{% underscoreTag order "borrower._class" as borrower.class %} {{ borrower.class }}</td> 
+        
 
     
         {% for borrower in borrowers %}
         <tr>
             <th>{{ forloop.counter }}</th>
-            <td id="title{{ forloop.counter }}">{{ borrower.name }}</td>
-            <td id="title{{ forloop.counter }}">{{ borrower.adm_no }}</td>
-            <td id="title{{ forloop.counter }}">{{borrower.class}}</td>
-            <td id="title{{ forloop.counter }}">{{ borrower.section }}</td>
-            <td id="title{{ forloop.counter }}">{{ borrower.roll_no}}</td>
-            <td id="title{{ forloop.counter }}">{{ borrower.contact_no }}</td>
-                {% if book.status_borrowed == True %}
-                <span class="text-secondary">
-                    Yes
-                </span>
-                {% else %}
-                <span class="text-success">
-                    No
-                </span>
-                {% endif %}
+            <td id="name{{ forloop.counter }}">{{ borrower.name }}</td>
+            <td id="adm_no{{ forloop.counter }}">{{ borrower.adm_no }}</td>
+            <td id="grade{{ forloop.counter }}">{{borrower.grade}}</td>
+            <td id="section{{ forloop.counter }}">{{ borrower.section }}</td>
+            <td id="roll_no{{ forloop.counter }}">{{ borrower.roll_no}}</td>
+            <td id="contact_no{{ forloop.counter }}">{{ borrower.contact_no }}</td>
+            <td id="book_borrowed{{ forloop.counter }}">{{ borrower.book_borrowed }}</td>
+                
             </td>
             {% autoescape on %}
 
             <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" 
                     data-bs-target="#editBorrower"
-                    onclick="editBorrowerHandler('{{ forloop.counter }}', '{{ book.pk }}')">Edit</button>
+                    onclick="editBorrowerHandler('{{ forloop.counter }}', '{{ borrower.pk }}', '{{ borrower.book_borrowed.pk }}')">Edit</button>
                 <button type="button" class="btn btn-danger"data-bs-toggle="modal" 
                     data-bs-target="#deleteBorrower"
-                    onclick="deleteBorrowerHandler('{{ forloop.counter }}', '{{ book.pk }}')">Delete</button>
+                    onclick="deleteBorrowerHandler('{{ forloop.counter }}', '{{ borrower.pk }}')">Delete</button>
             </td>
             {% endautoescape %}
 
@@ -83,39 +75,39 @@
         </tr>
         {% endfor %}
     </tbody>
-    <div class="modal fade" id="editBorrower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editBookLabel" aria-hidden="true">
+    <div class="modal fade" id="editBorrower" data-bs-backdrop="static" data-bs-keyboard = "false" tabindex="-1" aria-labelledby="editBorrowerLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-            <form method="POST" action="{% url 'edit_book' %}">
+            <form method="POST" action="{% url 'edit_borrower' %}">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editBookLabel">Edit Borrower</h5>
+                        <h5 class="modal-title" id="editBorrowerLabel">Edit Borrower</h5>
                     </div>
                     <div class="modal-body">
-                        {{ edit_book_form.pk }}
+                        {{ edit_borrower_form.pk }}
                         <div class="mb-3">
-                            <label for="titleEdit" class="form-label">Name</label>
-                            {{ edit_book_form.title }}
+                            <label for="nameEdit" class="form-label">Name</label>
+                            {{ edit_borrower_form.name }}
                         </div>
                         <div class="mb-3">
                             <label for="bookBorrowedEdit" class="form-label">Book Borrowed</label>
-                            <input type="text" id="BorrowedBookDetailsInput" class="form-control" autocomplete="off" onkeyup="dynamicSearch();displaySearchElems()" placeholder="Search book's title" title="Type in a name">
+                            {{ edit_borrower_form.book_borrowed }}
+                            {{ edit_borrower_form.book_pk }}
                             <ul id="dynamicSearchList" class="list-group list-group-flush" style="display: none;list-style: none; overflow-y: scroll; max-height: 20vh;">
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Adele')">Adele</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Agnes')">Agnes</a></li>                         
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Billy')">Billy</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Bob')">Bob</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Calvin')">Calvin</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Christina')">Christina</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Cindy')">Cindy</a></li>
+                                {% for book in books %}
+
+                                <li><a href="#" class="list-group-item" onclick="insertContent('{{ book.title }}'); document.getElementById('bookPrimaryKeyEdit').value = '{{ book.pk }}' ">{{ book.title }}</a></li>
+                        
+                                {% endfor %}
+            
                             </ul>                        
                         </div>
-                        <div class="mb-3">
-                            <label for="_classEdit" class="form-label">Class</label>
-                            {{ edit_borrower_form.class }}                        
+                        <div class="mb-3">         
+                            <label for="gradeEdit" class="form-label">Grade</label>
+                            {{ edit_borrower_form.grade }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="sectionEdit" class="form-label">Setion</label>
+                            <label for="sectionEdit" class="form-label">Section</label>
                             {{ edit_borrower_form.section }}                       
                         </div>
                         <div class="mb-3">
@@ -128,8 +120,9 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-check-label" for="admEdit">Admission Number</label>
-                            {{ edit_borrower_form.contact_no}}                        
+                            {{ edit_borrower_form.adm_no}}                        
                         </div>
+                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard Changes</button>
@@ -139,42 +132,50 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="deleteBorrower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteBookLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteBorrower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteBorrowerLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-            <form method="POST" action="{% url 'delete_book' %}">
+            <form method="POST" action="{% url 'delete_borrower' %}">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteBookLabel">Delete Borrower</h5>
+                        <h5 class="modal-title" id="deleteBorrowerLabel">Delete Borrower</h5>
                     </div>
                     <div class="modal-body">
-                        {{ delete_book_form.pk }}
+                        {{ delete_borrower_form.pk }}
                         <div class="container-fluid fs-5">
                             <div class="row mb-2">
-                              <div class="col">Borrower Details</div>
+                              <div class="col">Name</div>
                               <div class="col-1">:</div>
-                              <div class="col fw-bold" id="titleDel"></div>
+                              <div class="col fw-bold" id="nameDel"></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col">Borrowed Book Details</div>
+                                <div class="col">Admission Number</div>
                                 <div class="col-1">:</div>
-                                <div class="col fw-bold" id="authorDel"></div>
+                                <div class="col fw-bold" id="admnoDel"></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col">Issuing Date</div>
+                                <div class="col">Grade</div>
                                 <div class="col-1">:</div>
-                                <div class="col fw-bold" id="isbnNoDel"></div>
+                                <div class="col fw-bold" id="gradeDel"></div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col">Returning Date</div>
+                                <div class="col">Section</div>
                                 <div class="col-1">:</div>
-                                <div class="col fw-bold" id="pubHouseDel"></div>
+                                <div class="col fw-bold" id="sectionDel"></div>
                             </div>
+                            
                             <div class="row mb-2">
-                                <div class="col">Return Due</div>
+                                <div class="col">Book Borrowed</div>
                                 <div class="col-1">:</div>
-                                <div class="col fw-bold" id="statusBorrowedDel"></div>
+                                <div class="col fw-bold" id="bookBorrowedDel"></div>
                             </div>
+
+                            <div class="row mb-2">
+                                <div class="col">Contact Number</div>
+                                <div class="col-1">:</div>
+                                <div class="col fw-bold" id="contactDel"></div>
+                            </div>
+                            
                           </div>
                     </div>
                     <div class="modal-footer">
@@ -185,44 +186,64 @@
             </form>
         </div>
     </div>
-    <div class="modal fade" id="addBorrower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addBookLabel" aria-hidden="true">
+    <div class="modal fade" id="addBorrower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addBorrowerLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-            <form method="POST" action="{% url 'add_book' %}">
+            <form method="POST" action="{% url 'add_borrower' %}">
                 {% csrf_token %}
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addBookLabel">New Borrower</h5>
+                        <h5 class="modal-title" id="addBorrowerLabel">Add Borrower</h5>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="BorrowerDetails" class="form-label">Borrower Details</label>
-                            {{ add_book_form.title }}
+                            <label for="nameAdd" class="form-label">Name</label>
+                            {{ add_borrower_form.name }}
                         </div>
                         <div class="mb-3">
-                            <label for="BorrowedBookDetails">Borrowed Book Details</label>
-                            <input type="text" id="BorrowedBookDetailsInput" class="form-control" autocomplete="off" onkeyup="dynamicSearch();displaySearchElems()" placeholder="Search for names.." title="Type in a name">
-                            <ul id="dynamicSearchList" class="list-group list-group-flush" style="display: none;list-style: none; overflow-y: scroll; max-height: 20vh;">
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Adele')">Adele</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Agnes')">Agnes</a></li>                         
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Billy')">Billy</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Bob')">Bob</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Calvin')">Calvin</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Christina')">Christina</a></li>
-                                <li><a href="#" class="list-group-item" onclick="insertContent('Cindy')">Cindy</a></li>
-                            </ul>
+                            <label for="bookBorrowedAdd" class="form-label">Book Borrowed</label>
+                            
+                            {{ add_borrower_form.book_borrowed }}
+                            {{ add_borrower_form.book_pk }}
+                            
+                            
+                            <ul id="dynamicSearchListForAdd" class="list-group list-group-flush" style="display: none;list-style: none; overflow-y: scroll; max-height: 20vh;">
+                                {% for book in books %}
+
+                                <li><a href="#" class="list-group-item" onclick="insertContentForAdd('{{ book.title }}'); document.getElementById('bookPrimaryKeyAdd').value = '{{ book.pk }}' ">{{ book.title }}</a></li>
+                        
+                                {% endfor %}
+            
+                            </ul>          
+                        </div>
+                        <div class="mb-3">         
+                            <label for="admAdd" class="form-label">Admission Number</label>
+                            {{ add_borrower_form.adm_no }}                        
+                        </div>
+                        <div class="mb-3">         
+                            <label for="gradeAdd" class="form-label">Grade</label>
+                            {{ add_borrower_form.grade }}                        
                         </div>
                         <div class="mb-3">
-                            <label for="IssuingDate" class="form-label">Issuing Date</label>
-                            {{ add_book_form.isbn }}                        
+                            <label for="sectionAdd" class="form-label">Section</label>
+                            {{ add_borrower_form.section }}                       
                         </div>
                         <div class="mb-3">
-                            <label for="ReturningDate" class="form-label">Returning Date</label>
-                            {{ add_book_form.publisher }}                       
-                         </div>
-                        <div class="mb-3">
-                            <label for="ReturnDue" class="form-label">Return Due</label>
-                            {{ add_book_form.genre }}                        
+                            <label class="form-check-label" for="rollAdd">Roll Number</label>
+                            {{ add_borrower_form.roll_no}}                        
                         </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="contactAdd">Contact Number</label>
+                            {{ add_borrower_form.contact_no}}                        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="dateBorrowedAdd">Date Borrowed</label>
+                            {{ add_borrower_form.date_borrowed}}                        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="dateDue">Date Due</label>
+                            {{ add_borrower_form.date_due}}                        
+                        </div>
+                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
@@ -237,13 +258,20 @@
     const displaySearchElems = () => {
         document.getElementById("dynamicSearchList").style.display = "block";
     }
+    const displaySearchElemsForAdd = () => {
+        document.getElementById("dynamicSearchListForAdd").style.display = "block";
+    }
     const insertContent = x => {
-        document.getElementById("BorrowedBookDetailsInput").value = x;
+        document.getElementById("bookBorrowedEdit").value = x;
+        document.getElementById("dynamicSearchList").style.display = "none";
+    }
+    const insertContentForAdd = x => {
+        document.getElementById("bookBorrowedAdd").value = x;
         document.getElementById("dynamicSearchList").style.display = "none";
     }
     const dynamicSearch = () => {
-        var input, filter, ul, li, a, i, txtValue;
-        input = document.getElementById("BorrowedBookDetailsInput");
+        let input, filter, ul, li, a, i, txtValue;
+        input = document.getElementById("bookBorrowedEdit");
         filter = input.value.toUpperCase();
         ul = document.getElementById("dynamicSearchList");
         li = ul.getElementsByTagName("li");
@@ -257,35 +285,44 @@
             }
         }
     }
-    const editBorrowerHandler = (rowNum, id) => {
-        document.getElementById('primaryKeyEdit').value = id
-        document.getElementById('titleEdit').value = document.getElementById('title'+rowNum).innerHTML
-        document.getElementById('authorEdit').value = document.getElementById('author'+rowNum).innerHTML
-        document.getElementById('genreEdit').value = document.getElementById('genre'+rowNum).innerHTML
-        document.getElementById('isbnNoEdit').value = document.getElementById('isbnNo'+rowNum).innerHTML
-        document.getElementById('pubHouseEdit').value = document.getElementById('pubHouse'+rowNum).innerHTML
-        document.getElementById('bookLocationEdit').value = document.getElementById('bookLocation'+rowNum).innerHTML
-        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") 
-            document.getElementById('statusBorrowedEdit').checked = true
-        else
-            document.getElementById('statusBorrowedEdit').checked = false
+    const dynamicSearchForAdd = () => {
+        let input, filter, ul, li, a, i, txtValue;
+        input = document.getElementById("bookBorrowedAdd");
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("dynamicSearchListForAdd");
+        li = ul.getElementsByTagName("li");
+        for (i = 0; i < li.length; i++) {
+            a = li[i].getElementsByTagName("a")[0];
+            txtValue = a.textContent || a.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                li[i].style.display = "";
+            } else {
+                li[i].style.display = "none";
+            }
+        }
     }
+    const editBorrowerHandler = (rowNum, id, bookId) => {
+    
+        document.getElementById('primaryKeyEdit').value = id;
+        document.getElementById('sectionEdit').value = document.getElementById('section'+rowNum).innerHTML;
+        document.getElementById('admEdit').value = document.getElementById('adm_no'+rowNum).innerHTML;
+        document.getElementById('gradeEdit').value = document.getElementById('grade'+rowNum).innerHTML;
+        document.getElementById('rollEdit').value = document.getElementById('roll_no'+rowNum).innerHTML;
+        document.getElementById('contactEdit').value = document.getElementById('contact_no'+rowNum).innerHTML;
+        document.getElementById('bookBorrowedEdit').value = document.getElementById('book_borrowed'+rowNum).innerHTML;
+        document.getElementById('nameEdit').value = document.getElementById('name'+rowNum).innerHTML;
+        document.getElementById('bookPrimaryKeyEdit').value = bookId;
+        
+        }
     const deleteBorrowerHandler = (rowNum, id) => {
         document.getElementById('primaryKeyDel').value = id
-        document.getElementById('titleDel').innerHTML = document.getElementById('title'+rowNum).innerHTML
-        document.getElementById('authorDel').innerHTML = document.getElementById('author'+rowNum).innerHTML
-        document.getElementById('genreDel').innerHTML = document.getElementById('genre'+rowNum).innerHTML
-        document.getElementById('isbnNoDel').innerHTML = document.getElementById('isbnNo'+rowNum).innerHTML
-        document.getElementById('pubHouseDel').innerHTML = document.getElementById('pubHouse'+rowNum).innerHTML
-        document.getElementById('bookLocationDel').innerHTML = document.getElementById('bookLocation'+rowNum).innerHTML
-        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") {
-            document.getElementById('statusBorrowedDel').innerHTML = "Borrowed"
-            document.getElementById('statusBorrowedDel').classList.add('text-secondary')
-        }
-        else {
-            document.getElementById('statusBorrowedDel').innerHTML = "Available"
-            document.getElementById('statusBorrowedDel').classList.add('text-success')
-        }
+        document.getElementById('nameDel').innerHTML = document.getElementById('name'+rowNum).innerHTML
+        document.getElementById('admnoDel').innerHTML = document.getElementById('adm_no'+rowNum).innerHTML
+        document.getElementById('sectionDel').innerHTML = document.getElementById('section'+rowNum).innerHTML
+        document.getElementById('gradeDel').innerHTML = document.getElementById('grade'+rowNum).innerHTML
+        document.getElementById('bookBorrowedDel').innerHTML = document.getElementById('book_borrowed'+rowNum).innerHTML
+        document.getElementById('contactDel').innerHTML = document.getElementById('contact_no'+rowNum).innerHTML
+        
     }
 
 </script>            

@@ -23,7 +23,7 @@ class Borrower(models.Model):
         return self.name
     name = models.CharField(max_length=50)
     adm_no = models.CharField(max_length=10)
-    _class = models.IntegerField(
+    grade = models.IntegerField(
         validators=[
             MaxValueValidator(12),
             MinValueValidator(1)
@@ -38,8 +38,8 @@ class Borrower(models.Model):
     )
     contact_no = models.BigIntegerField(
         validators=[
-            MaxValueValidator(9999999999),
-            MinValueValidator(1111111111)
+            MaxValueValidator(9223372036854775807),
+            MinValueValidator(-9223372036854775807)
         ]
     )
     

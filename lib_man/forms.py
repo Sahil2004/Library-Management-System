@@ -195,6 +195,13 @@ class EditBorrowerForm(forms.ModelForm):
             'id': "primaryKeyEdit"
         }
     ))
+
+    book_pk = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'style': 'display: none',
+            'id': "bookPrimaryKeyEdit"
+        }
+    ))
     name = forms.CharField(widget=forms.TextInput(
         attrs={
             'class': 'form-control',
@@ -207,22 +214,22 @@ class EditBorrowerForm(forms.ModelForm):
         attrs={
             'class': 'form-control',
             'maxlength': '10',
-            'placeholder': "Enter borrower's admission number: ",
+            'placeholder': "Enter borrower's admission number",
             'id': 'admEdit'
         }
     ))
-    _class = forms.IntegerField(widget=forms.NumberInput(
+    grade = forms.IntegerField(widget=forms.NumberInput(
         attrs={
             'class': 'form-control',
             'maxlength': '2',
-            'placeholder': "Enter borrower's class: ",
-            'id': '_classEdit'
+            'placeholder': "Enter borrower's grade",
+            'id': 'gradeEdit'
         }
     ))
     section = forms.CharField(widget=forms.TextInput(
         attrs={
             'class': 'form-control',
-            'maxlength': '1',
+            'maxlength': '50',
             'placeholder': "Enter borrower's section",
             'id': 'sectionEdit'
         }
@@ -231,7 +238,7 @@ class EditBorrowerForm(forms.ModelForm):
         attrs={
             'class': 'form-control',
             'maxlength': '1',
-            'placeholder': "Enter borrower's roll number: ",
+            'placeholder': "Enter borrower's roll number",
             'id': 'rollEdit'
         }
     ))
@@ -239,19 +246,27 @@ class EditBorrowerForm(forms.ModelForm):
         attrs={
             
             'class': 'form-control',
-            'minlength': '1111111111',
-            'maxlength': '9999999999',
+            'minlength': '-9223372036854775808',
+            'maxlength': '9223372036854775807',
             'placeholder': "Enter borrower's contact number",
             'id': 'contactEdit'
         }
     ))
-    choices_books = Book.objects.all()
-    book_borrowed = forms.CharField(label = 'Book Borrowed',widget = forms.Select(choices=choices_books,
+    book_borrowed = forms.CharField(widget=forms.TextInput(
         attrs={
-            'id': 'bookBorrowedEdit'
-                
-        } 
+            
+            'class': 'form-control',
+            'placeholder': "Search Book's Title",
+            'id': 'bookBorrowedEdit', 
+            'autocomplete': 'off', 
+            'type': 'text', 
+            'onkeyup':"dynamicSearch();displaySearchElems()", 
+            'title' : "Type in a name"
+
+        }
     ))
+
+    
 
 class SearchBorrowersForm(forms.Form):
     keyword = forms.CharField(widget=forms.TextInput(
@@ -269,7 +284,7 @@ class SearchBorrowersForm(forms.Form):
         choices=((
             ('Name', 'Name'), 
             ('Admission Number','Admission Number'),
-            ('Class','Class'),
+            ('Grade','Grade'),
             ('Section','Section'), 
             ('Roll Number','Roll Number'), 
             ('Contact Number','Contact Number'), 
@@ -286,8 +301,113 @@ class SearchBorrowersForm(forms.Form):
     )
 
     
+class AddBorrowerForm(forms.ModelForm):
+    class Meta:
+        model = Borrower
+        fields = '__all__'
+    
+    book_pk = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'style': 'display: none',
+            'id': "bookPrimaryKeyAdd"
+        }
+    ))    
+    name = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '50',
+            'placeholder': "Enter borrower's name",
+            'id': "nameAdd"
+        }
+    ))
+    adm_no = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '10',
+            'placeholder': "Enter borrower's admission number",
+            'id': 'admAdd'
+        }
+    ))
+    grade = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '2',
+            'placeholder': "Enter borrower's class",
+            'id': 'gradeAdd'
+        }
+    ))
+    section = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '1',
+            'placeholder': "Enter borrower's section",
+            'id': 'sectionAdd'
+        }
+    ))
+    roll_no = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'class': 'form-control',
+            'maxlength': '1',
+            'placeholder': "Enter borrower's roll number",
+            'id': 'rollAdd'
+        }
+    ))
+    contact_no = forms.IntegerField(widget=forms.TextInput(
+        attrs={
+            
+            'class': 'form-control',
+            'minlength': '-9223372036854775808',
+            'maxlength': '9223372036854775807',
+            'placeholder': "Enter borrower's contact number",
+            'id': 'contactAdd'
+        }
+    ))
 
+    book_borrowed = forms.CharField(widget=forms.TextInput(
+        attrs={
+            
+            'class': 'form-control',
+            'placeholder': "Search Book's Title",
+            'id': 'bookBorrowedAdd', 
+            'autocomplete': 'off', 
+            'type': 'text', 
+            'onkeyup':"dynamicSearchForAdd();displaySearchElemsForAdd()", 
+            'title' : "Type in a name"
 
+        }
+    ))
+    
+    date_borrowed = forms.DateField(widget=forms.DateInput(
+        attrs={
+            
+            'class': 'form-control',
+            'type':'date', 
+            'placeholder': "Enter date borrowed",
+            'id': 'dateBorrowedAdd', 
+         
+        }
+    ))
 
-
+    date_due = forms.DateField(widget=forms.DateInput(
+        attrs={
+            
+            'class': 'form-control',
+            'type':'date', 
+            'placeholder': "Enter date due: ",
+            'id': 'dateDueAdd', 
+         
+        }
+    ))
+    
+    
+class DeleteBorrowerForm(forms.ModelForm):
+    class Meta:
+        model = Borrower
+        fields = '__all__'
+    pk = forms.IntegerField(widget=forms.NumberInput(
+        attrs={
+            'style': 'display: none',
+            'id': "primaryKeyDel"
+        }
+    ))
     

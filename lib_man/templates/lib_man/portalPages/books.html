@@ -232,13 +232,13 @@
 </table>
 <script>
     const editBookHandler = (rowNum, id) => {
-        document.getElementById('primaryKeyEdit').value = id
-        document.getElementById('titleEdit').value = document.getElementById('title'+rowNum).innerHTML
-        document.getElementById('authorEdit').value = document.getElementById('author'+rowNum).innerHTML
-        document.getElementById('genreEdit').value = document.getElementById('genre'+rowNum).innerHTML
-        document.getElementById('isbnNoEdit').value = document.getElementById('isbnNo'+rowNum).innerHTML
-        document.getElementById('pubHouseEdit').value = document.getElementById('pubHouse'+rowNum).innerHTML
-        document.getElementById('bookLocationEdit').value = document.getElementById('bookLocation'+rowNum).innerHTML
+        document.getElementById('primaryKeyEdit').defaultValue = id
+        document.getElementById('titleEdit').defaultValue = document.getElementById('title'+rowNum).innerHTML
+        document.getElementById('authorEdit').defaultValue = document.getElementById('author'+rowNum).innerHTML
+        document.getElementById('genreEdit').defaultValue = document.getElementById('genre'+rowNum).innerHTML
+        document.getElementById('isbnNoEdit').defaultValue = document.getElementById('isbnNo'+rowNum).innerHTML
+        document.getElementById('pubHouseEdit').defaultValue = document.getElementById('pubHouse'+rowNum).innerHTML
+        document.getElementById('bookLocationEdit').defaultValue = document.getElementById('bookLocation'+rowNum).innerHTML
         if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") 
             document.getElementById('statusBorrowedEdit').checked = true
         else
