@@ -255,6 +255,16 @@
     </div>
 </table>
 <script>
+
+    const dateToday = () => {
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); 
+        let yyyy = today.getFullYear();
+        today = mm + '/' + dd + '/' + yyyy;
+        return today;
+        
+    }
     const displaySearchElems = () => {
         document.getElementById("dynamicSearchList").style.display = "block";
     }
@@ -267,7 +277,7 @@
     }
     const insertContentForAdd = x => {
         document.getElementById("bookBorrowedAdd").value = x;
-        document.getElementById("dynamicSearchList").style.display = "none";
+        document.getElementById("dynamicSearchListForAdd").style.display = "none";
     }
     const dynamicSearch = () => {
         let input, filter, ul, li, a, i, txtValue;

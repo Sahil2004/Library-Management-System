@@ -75,12 +75,7 @@ class EditBookForm(forms.ModelForm):
             'id': 'bookLocationEdit'
         }
     ))
-    status_borrowed = forms.BooleanField(required=False, widget=forms.CheckboxInput(
-        attrs={
-            'class': 'form-check-label',
-            'id': 'statusBorrowedEdit',
-        },
-    ))
+    
 
 class AddBookForm(forms.ModelForm):
     class Meta:
@@ -133,12 +128,6 @@ class AddBookForm(forms.ModelForm):
             'placeholder': 'Enter book location',
             'id': 'bookLocationAdd'
         }
-    ))
-    status_borrowed = forms.BooleanField(required=False, widget=forms.CheckboxInput(
-        attrs={
-            'class': 'form-check-label',
-            'id': 'statusBorrowedAdd',
-        },
     ))
 
 class DeleteBookForm(forms.ModelForm):
@@ -384,7 +373,7 @@ class AddBorrowerForm(forms.ModelForm):
             'type':'date', 
             'placeholder': "Enter date borrowed",
             'id': 'dateBorrowedAdd', 
-         
+            
         }
     ))
 
@@ -395,7 +384,8 @@ class AddBorrowerForm(forms.ModelForm):
             'type':'date', 
             'placeholder': "Enter date due: ",
             'id': 'dateDueAdd', 
-         
+            
+            
         }
     ))
     

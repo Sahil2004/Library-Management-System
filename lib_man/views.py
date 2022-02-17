@@ -78,7 +78,8 @@ def dashboard(request):
     context = {
         'no_of_books': Book.objects.all().count(),
         'no_of_borrowed_books': Book.objects.filter(status_borrowed=True).count(),
-        'no_of_borrowers': Borrower.objects.all().count()
+        'no_of_borrowers': Borrower.objects.all().count(), 
+        'no_of_books_due': Borrower.objects.filter(date_due__lte = datetime.today()).count()
     }
     return render(request, 'lib_man/portalPages/dashboard.html', context)
 
@@ -164,19 +165,10 @@ def edit_book(request):
     book.publisher = request.POST.get('publisher')
     book.genre = request.POST.get('genre')
     book.book_location = request.POST.get('book_location')
-    if request.POST.get('status_borrowed') == 'on':
-        book.status_borrowed = True
-    else:
-        book.status_borrowed = False
     book.save()
     return redirect('books')
 
 def add_book(request):
-    status_borrowed = True
-    if request.POST.get('status_borrowed') == 'on':
-        status_borrowed = True
-    else:
-        status_borrowed = False
     Book.objects.create(
     title=request.POST.get('title'),
     author=request.POST.get('author'),
@@ -184,7 +176,7 @@ def add_book(request):
     publisher=request.POST.get('publisher'),
     genre=request.POST.get('genre'),
     book_location=request.POST.get('book_location'),
-    status_borrowed=status_borrowed
+    status_borrowed = False
     )
     return redirect('books')
 
@@ -216,22 +208,28 @@ def edit_borrower(request):
     borrower.grade = request.POST.get('grade')
     borrower.section = request.POST.get('section')
     borrower.roll_no = request.POST.get('roll_no')
-    old_book = borrower.book_borrowed
+    old_book_pk = borrower.book_borrowed.pk
+    old_book = Book.objects.get(pk = old_book_pk)
     old_book.status_borrowed = False
+    old_book.save()
     new_book = Book.objects.get(pk = request.POST.get('book_pk'))
     borrower.book_borrowed = new_book
     new_book.status_borrowed = True
+    new_book.save()
     borrower.save()
     return redirect('borrowers')    
 
 def delete_borrower(request):
     borrower = Borrower.objects.get(pk = request.POST.get('pk'))
-    borrower.book_borrowed.status_borrowed = False 
+    current_book_pk = borrower.book_borrowed.pk
+    current_book = Book.objects.get(pk=current_book_pk)
+    current_book.status_borrowed = False
+    current_book.save() 
     borrower.delete()
     return redirect('borrowers')
 
 def add_borrower(request):
-    book_to_add =Book.objects.get(pk = request.POST.get('book_pk')) 
+    book_to_add =Book.objects.get(pk = request.POST.get('book_pk'))     
     Borrower.objects.create(
     name = request.POST.get('name'),
     adm_no = request.POST.get('adm_no'),
@@ -244,4 +242,5 @@ def add_borrower(request):
     date_due = request.POST.get('date_due')
     )
     book_to_add.status_borrowed = True
+    book_to_add.save()
     return redirect('borrowers')

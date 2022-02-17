@@ -114,10 +114,6 @@
                             <label for="bookLocationEdit" class="form-label">Book Location</label>
                             {{ edit_book_form.book_location }}                        
                         </div>
-                        <div class="mb-3">
-                            <label class="form-check-label" for="statusBorrowedEdit">The book is borrowed</label>
-                            {{ edit_book_form.status_borrowed}}                        
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard Changes</button>
@@ -216,10 +212,7 @@
                             <label for="bookLocationAdd" class="form-label">Book Location</label>
                             {{ add_book_form.book_location }}                        
                         </div>
-                        <div class="mb-3">
-                            <label class="form-check-label" for="statusBorrowedAdd">The book is borrowed</label>
-                            {{ add_book_form.status_borrowed}}                        
-                        </div>
+        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
@@ -239,10 +232,6 @@
         document.getElementById('isbnNoEdit').defaultValue = document.getElementById('isbnNo'+rowNum).innerHTML
         document.getElementById('pubHouseEdit').defaultValue = document.getElementById('pubHouse'+rowNum).innerHTML
         document.getElementById('bookLocationEdit').defaultValue = document.getElementById('bookLocation'+rowNum).innerHTML
-        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") 
-            document.getElementById('statusBorrowedEdit').checked = true
-        else
-            document.getElementById('statusBorrowedEdit').checked = false
     }
     const deleteBookHandler = (rowNum, id) => {
         document.getElementById('primaryKeyDel').value = id
