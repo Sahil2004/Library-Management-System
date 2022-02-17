@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import datetime, timedelta
 
@@ -23,7 +23,7 @@ class Borrower(models.Model):
         return self.name
     name = models.CharField(max_length=50)
     adm_no = models.CharField(max_length=10)
-    _class = models.IntegerField(
+    grade = models.IntegerField(
         validators=[
             MaxValueValidator(12),
             MinValueValidator(1)
@@ -38,10 +38,11 @@ class Borrower(models.Model):
     )
     contact_no = models.BigIntegerField(
         validators=[
-            MaxValueValidator(9999999999),
-            MinValueValidator(1111111111)
+            MaxValueValidator(9223372036854775807),
+            MinValueValidator(-9223372036854775807)
         ]
     )
+    
     book_borrowed = models.ForeignKey(Book, on_delete=models.CASCADE)
     date_borrowed = models.DateField(default=datetime.today)
     date_due = models.DateField(default=get_due_date())

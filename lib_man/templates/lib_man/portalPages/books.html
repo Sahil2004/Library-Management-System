@@ -40,7 +40,7 @@
             <td id="pubHouse{{ forloop.counter }}">{{ book.publisher }}</td>
             <td id="genre{{ forloop.counter }}">{{ book.genre }}</td>
             <td id="bookLocation{{ forloop.counter }}">{{ book.book_location }}</td>
-            <td id="statusBorrowed{{ forloop.counter >
+            <td id="statusBorrowed{{ forloop.counter }}">
                 {% if book.status_borrowed == True %}
                 <span class="text-secondary">
                     Borrowed
@@ -113,10 +113,6 @@
                         <div class="mb-3">
                             <label for="bookLocationEdit" class="form-label">Book Location</label>
                             {{ edit_book_form.book_location }}                        
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-check-label" for="statusBorrowedEdit">The book is borrowed</label>
-                            {{ edit_book_form.status_borrowed}}                        
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -216,10 +212,7 @@
                             <label for="bookLocationAdd" class="form-label">Book Location</label>
                             {{ add_book_form.book_location }}                        
                         </div>
-                        <div class="mb-3">
-                            <label class="form-check-label" for="statusBorrowedAdd">The book is borrowed</label>
-                            {{ add_book_form.status_borrowed}}                        
-                        </div>
+        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Exit</button>
@@ -232,17 +225,13 @@
 </table>
 <script>
     const editBookHandler = (rowNum, id) => {
-        document.getElementById('primaryKeyEdit').value = id
-        document.getElementById('titleEdit').value = document.getElementById('title'+rowNum).innerHTML
-        document.getElementById('authorEdit').value = document.getElementById('author'+rowNum).innerHTML
-        document.getElementById('genreEdit').value = document.getElementById('genre'+rowNum).innerHTML
-        document.getElementById('isbnNoEdit').value = document.getElementById('isbnNo'+rowNum).innerHTML
-        document.getElementById('pubHouseEdit').value = document.getElementById('pubHouse'+rowNum).innerHTML
-        document.getElementById('bookLocationEdit').value = document.getElementById('bookLocation'+rowNum).innerHTML
-        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") 
-            document.getElementById('statusBorrowedEdit').checked = true
-        else
-            document.getElementById('statusBorrowedEdit').checked = false
+        document.getElementById('primaryKeyEdit').defaultValue = id
+        document.getElementById('titleEdit').defaultValue = document.getElementById('title'+rowNum).innerHTML
+        document.getElementById('authorEdit').defaultValue = document.getElementById('author'+rowNum).innerHTML
+        document.getElementById('genreEdit').defaultValue = document.getElementById('genre'+rowNum).innerHTML
+        document.getElementById('isbnNoEdit').defaultValue = document.getElementById('isbnNo'+rowNum).innerHTML
+        document.getElementById('pubHouseEdit').defaultValue = document.getElementById('pubHouse'+rowNum).innerHTML
+        document.getElementById('bookLocationEdit').defaultValue = document.getElementById('bookLocation'+rowNum).innerHTML
     }
     const deleteBookHandler = (rowNum, id) => {
         document.getElementById('primaryKeyDel').value = id
