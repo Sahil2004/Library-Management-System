@@ -1,12 +1,12 @@
 # Library-Management-System
 
 
-Credits:
-DanishSinghSethi (full-stack developer)
-Sahil2004 (front-end developer)
-milap720 (back-end developer)
-
-Login details:
-Username: admin
-Email address: 
-Password: damisa123
+<b>Credits:</b><br>
+DanishSinghSethi (full-stack developer)<br>
+Sahil2004 (front-end developer)<br>
+milap720 (back-end developer)<br>
+<p>
+<b>Login details:</b><br>
+Username: admin<br>
+Email address: <br>
+Password: damisa123<br>
