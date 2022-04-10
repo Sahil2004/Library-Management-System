@@ -1,6 +1,6 @@
 from django.db import models 
 from django.core.validators import MaxValueValidator, MinValueValidator
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 class Book(models.Model):
 
@@ -17,7 +17,7 @@ class Book(models.Model):
 class Borrower(models.Model):
 
     def get_due_date():
-        return datetime.today() + timedelta(days=15)
+        return date.today() + timedelta(days=15)
 
     def __str__(self):
         return self.name
@@ -44,5 +44,5 @@ class Borrower(models.Model):
     )
     
     book_borrowed = models.ForeignKey(Book, on_delete=models.CASCADE)
-    date_borrowed = models.DateField(default=datetime.today)
+    date_borrowed = models.DateField(default=date.today())
     date_due = models.DateField(default=get_due_date())

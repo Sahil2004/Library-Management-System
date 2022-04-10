@@ -53,7 +53,7 @@
             </td>
             {% autoescape on %}
 
-            <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
+            <td style=" display: grid; grid-template-rows: repeat(2, 50%); grid-gap: 2%;">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" 
                     data-bs-target="#editBook"
                     onclick="editBookHandler('{{ forloop.counter }}', '{{ book.pk }}')">Edit</button>
@@ -227,22 +227,22 @@
     document.getElementsByTagName('title')[0].innerText = 'Books';
     const editBookHandler = (rowNum, id) => {
         document.getElementById('primaryKeyEdit').defaultValue = id
-        document.getElementById('titleEdit').defaultValue = document.getElementById('title'+rowNum).innerHTML
-        document.getElementById('authorEdit').defaultValue = document.getElementById('author'+rowNum).innerHTML
-        document.getElementById('genreEdit').defaultValue = document.getElementById('genre'+rowNum).innerHTML
-        document.getElementById('isbnNoEdit').defaultValue = document.getElementById('isbnNo'+rowNum).innerHTML
-        document.getElementById('pubHouseEdit').defaultValue = document.getElementById('pubHouse'+rowNum).innerHTML
-        document.getElementById('bookLocationEdit').defaultValue = document.getElementById('bookLocation'+rowNum).innerHTML
+        document.getElementById('titleEdit').defaultValue = document.getElementById('title'+rowNum).innerText
+        document.getElementById('authorEdit').defaultValue = document.getElementById('author'+rowNum).innerText
+        document.getElementById('genreEdit').defaultValue = document.getElementById('genre'+rowNum).innerText
+        document.getElementById('isbnNoEdit').defaultValue = document.getElementById('isbnNo'+rowNum).innerText
+        document.getElementById('pubHouseEdit').defaultValue = document.getElementById('pubHouse'+rowNum).innerText
+        document.getElementById('bookLocationEdit').defaultValue = document.getElementById('bookLocation'+rowNum).innerText
     }
     const deleteBookHandler = (rowNum, id) => {
         document.getElementById('primaryKeyDel').value = id
-        document.getElementById('titleDel').innerHTML = document.getElementById('title'+rowNum).innerHTML
-        document.getElementById('authorDel').innerHTML = document.getElementById('author'+rowNum).innerHTML
-        document.getElementById('genreDel').innerHTML = document.getElementById('genre'+rowNum).innerHTML
-        document.getElementById('isbnNoDel').innerHTML = document.getElementById('isbnNo'+rowNum).innerHTML
-        document.getElementById('pubHouseDel').innerHTML = document.getElementById('pubHouse'+rowNum).innerHTML
-        document.getElementById('bookLocationDel').innerHTML = document.getElementById('bookLocation'+rowNum).innerHTML
-        if(document.getElementById('statusBorrowed'+rowNum).innerHTML === "Borrowed") {
+        document.getElementById('titleDel').innerHTML = document.getElementById('title'+rowNum).innerText
+        document.getElementById('authorDel').innerHTML = document.getElementById('author'+rowNum).innerText
+        document.getElementById('genreDel').innerHTML = document.getElementById('genre'+rowNum).innerText
+        document.getElementById('isbnNoDel').innerHTML = document.getElementById('isbnNo'+rowNum).innerText
+        document.getElementById('pubHouseDel').innerHTML = document.getElementById('pubHouse'+rowNum).innerText
+        document.getElementById('bookLocationDel').innerHTML = document.getElementById('bookLocation'+rowNum).innerText
+        if(document.getElementById('statusBorrowed'+rowNum).innerText === "Borrowed") {
             document.getElementById('statusBorrowedDel').innerHTML = "Borrowed"
             document.getElementById('statusBorrowedDel').classList.add('text-secondary')
         }
