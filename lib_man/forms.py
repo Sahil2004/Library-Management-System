@@ -285,6 +285,27 @@ class EditBorrowerForm(forms.ModelForm):
         }
     ))
 
+    date_borrowed = forms.DateField(widget=forms.DateInput(
+        attrs={
+            
+            'class': 'form-control',
+            'type':'date', 
+            'placeholder': "Enter date borrowed",
+            'id': 'dateBorrowedEdit', 
+            
+        }
+    ))
+
+    date_due = forms.DateField(widget=forms.DateInput(
+        attrs={
+            
+            'class': 'form-control',
+            'type':'date', 
+            'placeholder': "Enter date due: ",
+            'id': 'dateDueEdit', 
+        }
+    ))
+
     
 
 class SearchBorrowersForm(forms.Form):

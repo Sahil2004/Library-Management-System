@@ -27,6 +27,9 @@
             <th scope="col">Roll Number</th>
             <th scope="col">Contact Number</th>
             <th scope="col">Book Borrowed</th>
+            <th scope="col">Issuing Date</th>
+            <th scope="col">Due Date</th>
+            <th scope="col">Book Due</th>
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -44,11 +47,18 @@
             <td id="roll_no{{ forloop.counter }}">{{ borrower.roll_no}}</td>
             <td id="contact_no{{ forloop.counter }}">{{ borrower.contact_no }}</td>
             <td id="book_borrowed{{ forloop.counter }}">{{ borrower.book_borrowed }}</td>
-                
-            </td>
+            <td id="date_borrowed{{ forloop.counter }}">{{ borrower.date_borrowed|date:'Y-m-d' }}</td>
+            <td id="date_due{{ forloop.counter }}">{{ borrower.date_due|date:'Y-m-d' }}</td>
+            {% now 'Y-m-d' as todays_date %}
+            {% if todays_date >= borrower.date_due|date:'Y-m-d' %}
+            <td style='color: red'>YES</td>
+            {% else %}
+            <td style='color: green'>NO</td>
+            {% endif %}
+
             {% autoescape on %}
 
-            <td style=" display: grid; grid-template-columns: repeat(2, 50%); grid-gap: 2%;">
+            <td style=" display: grid; grid-template-rows: repeat(2, 50%); grid-gap: 2%;">
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" 
                     data-bs-target="#editBorrower"
                     onclick="editBorrowerHandler('{{ forloop.counter }}', '{{ borrower.pk }}', '{{ borrower.book_borrowed.pk }}')">Edit</button>
@@ -122,7 +132,14 @@
                             <label class="form-check-label" for="admEdit">Admission Number</label>
                             {{ edit_borrower_form.adm_no}}                        
                         </div>
-                        
+                        <div class="mb-3">
+                            <label class="form-check-label" for="dateBorrowedEdit">Date Borrowed</label>
+                            {{ edit_borrower_form.date_borrowed}}                        
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-check-label" for="dateDueEdit">Date Due</label>
+                            {{ edit_borrower_form.date_due}}                        
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Discard Changes</button>
@@ -240,7 +257,7 @@
                             {{ add_borrower_form.date_borrowed}}                        
                         </div>
                         <div class="mb-3">
-                            <label class="form-check-label" for="dateDue">Date Due</label>
+                            <label class="form-check-label" for="dateDueAdd">Date Due</label>
                             {{ add_borrower_form.date_due}}                        
                         </div>
                         
@@ -312,26 +329,29 @@
         }
     }
     const editBorrowerHandler = (rowNum, id, bookId) => {
-    
         document.getElementById('primaryKeyEdit').value = id;
-        document.getElementById('sectionEdit').value = document.getElementById('section'+rowNum).innerHTML;
-        document.getElementById('admEdit').value = document.getElementById('adm_no'+rowNum).innerHTML;
-        document.getElementById('gradeEdit').value = document.getElementById('grade'+rowNum).innerHTML;
-        document.getElementById('rollEdit').value = document.getElementById('roll_no'+rowNum).innerHTML;
-        document.getElementById('contactEdit').value = document.getElementById('contact_no'+rowNum).innerHTML;
-        document.getElementById('bookBorrowedEdit').value = document.getElementById('book_borrowed'+rowNum).innerHTML;
-        document.getElementById('nameEdit').value = document.getElementById('name'+rowNum).innerHTML;
+        document.getElementById('sectionEdit').value = document.getElementById('section'+rowNum).innerText;
+        document.getElementById('admEdit').value = document.getElementById('adm_no'+rowNum).innerText;
+        document.getElementById('gradeEdit').value = document.getElementById('grade'+rowNum).innerText;
+        document.getElementById('rollEdit').value = document.getElementById('roll_no'+rowNum).innerText;
+        document.getElementById('contactEdit').value = document.getElementById('contact_no'+rowNum).innerText;
+        document.getElementById('bookBorrowedEdit').value = document.getElementById('book_borrowed'+rowNum).innerText;
+        document.getElementById('nameEdit').value = document.getElementById('name'+rowNum).innerText;
+        document.getElementById('dateBorrowedEdit').value = document.getElementById('date_borrowed'+rowNum).innerText;
+        document.getElementById('dateDueEdit').value = document.getElementById('date_due'+rowNum).innerText;
         document.getElementById('bookPrimaryKeyEdit').value = bookId;
         
         }
     const deleteBorrowerHandler = (rowNum, id) => {
         document.getElementById('primaryKeyDel').value = id
-        document.getElementById('nameDel').innerHTML = document.getElementById('name'+rowNum).innerHTML
-        document.getElementById('admnoDel').innerHTML = document.getElementById('adm_no'+rowNum).innerHTML
-        document.getElementById('sectionDel').innerHTML = document.getElementById('section'+rowNum).innerHTML
-        document.getElementById('gradeDel').innerHTML = document.getElementById('grade'+rowNum).innerHTML
-        document.getElementById('bookBorrowedDel').innerHTML = document.getElementById('book_borrowed'+rowNum).innerHTML
-        document.getElementById('contactDel').innerHTML = document.getElementById('contact_no'+rowNum).innerHTML
+        document.getElementById('nameDel').innerHTML = document.getElementById('name'+rowNum).innerText
+        document.getElementById('admnoDel').innerHTML = document.getElementById('adm_no'+rowNum).innerText
+        document.getElementById('sectionDel').innerHTML = document.getElementById('section'+rowNum).innerText
+        document.getElementById('gradeDel').innerHTML = document.getElementById('grade'+rowNum).innerText
+        document.getElementById('bookBorrowedDel').innerHTML = document.getElementById('book_borrowed'+rowNum).innerText
+        document.getElementById('contactDel').innerHTML = document.getElementById('contact_no'+rowNum).innerText
+        document.getElementById('dateBorrowedDel').value = document.getElementById('date_borrowed'+rowNum).innerText;
+        document.getElementById('dateDueDel').value = document.getElementById('date_due'+rowNum).innerText;
         
     }
 

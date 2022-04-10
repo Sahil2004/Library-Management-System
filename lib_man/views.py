@@ -225,6 +225,8 @@ def edit_borrower(request):
     borrower.grade = request.POST.get('grade')
     borrower.section = request.POST.get('section')
     borrower.roll_no = request.POST.get('roll_no')
+    borrower.date_borrowed = request.POST.get('date_borrowed')
+    borrower.date_due = request.POST.get('date_due')
     old_book_pk = borrower.book_borrowed.pk
     old_book = Book.objects.get(pk = old_book_pk)
     old_book.status_borrowed = False
