@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from urllib.parse import urlencode
 from .models import Book, Borrower
-from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm, SearchBooksForm
+from .forms import EditBookForm, AddBookForm, DeleteBookForm, LoginForm, SearchBooksForm, SearchBooksUnauthForm
 from .forms import EditBorrowerForm, SearchBorrowersForm, AddBorrowerForm, DeleteBorrowerForm
 from datetime import datetime
 
@@ -66,9 +66,17 @@ def login(request):
 
 
 def lib_search(request):
-    context = {
-        'books': Book.objects.all()
-    }   
+    if not request.GET:
+        context = {
+            'books': Book.objects.all(),
+            'search_books_unauth_form': SearchBooksUnauthForm()
+        }
+    else:
+        context = {
+            'books': search_books_results(request.GET.get('keyword'), request.GET.get('search_by')),
+            'search_books_unauth_form': SearchBooksUnauthForm(),
+            'search_results_present': True
+        }
     return render(request, 'lib_man/library_search.html', context)
 
 
@@ -151,7 +159,11 @@ def librarian_login(request):
         login_user(request, user)
         return redirect('dashboard')
     else:
-        return redirect('login')
+        context = {
+            'login_form': LoginForm(),
+            'login_error': True
+        }
+        return render(request, 'lib_man/login.html', context)
 
 def librarian_logout(request):
     logout_user(request)
@@ -191,6 +203,11 @@ def search_books(request):
     url = '{}?{}'.format(base_url, query_string)
     return redirect(url)
 
+def search_books_unauth(request):
+    base_url = reverse('lib_search')
+    query_string =  urlencode({'search_by': request.POST.get('search_by'), 'keyword': request.POST.get('keyword')})
+    url = '{}?{}'.format(base_url, query_string)
+    return redirect(url)
 
 #Borrower App Functions
 

@@ -2,59 +2,78 @@
     
 {% block headerAndFooter %}
 <div style="display: grid;">
-    <div class="input-group my-5 w-50 mx-auto">
-        <input type="text" class="form-control" placeholder="Search" aria-label="Search"aria-describedby="basic-addon2" autofocus tabindex="1">
-        <div class="input-group-append">
-            <span class="input-group-text" style="cursor: no-drop;" id="basic-addon2">Search</span>
+    <form action='{% url "search_books_unauth" %}' method="POST">
+        {% csrf_token %}
+        <div class="d-inline-flex w-100 mb-5 mt-5 pe-10 justify-content-center">
+            <div class="input-group" style="width: 80%;">
+                {{ search_books_unauth_form.keyword }}
+                <div class="input-group-append me-4">
+                    <input type="submit" class="input-group-text" id="basic-addon2"value="Search">
+                </div>
+                {{ search_books_unauth_form.search_by }}
+                {% if search_results_present %}
+                    <button onclick='location.href=`{% url "lib_search" %}`'class="btn btn-primary ms-4">Show All Books</button>
+                {% endif %}
+            </div>
         </div>
-    </div>
+    </form>
     <div class="px-5">
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">
-                        Book Name
-                    </th>
-                    <th scope="col">
-                        Author
-                    </th>
-                    <th scope="col">
-                        Genre
-                    </th>
-                    <th scope="col">
-                        Borrowed
-                    </th>
-                    <th scope="col">
-                        Book Location
-                    </th>
+                    <th scope="col">#</th>
+                    <th scope="col">Book Title</th>
+                    <th scope="col">Book Author</th>
+                    <th scope="col">ISBN Number</th>
+                    <th scope="col">Publishing House</th>
+                    <th scope="col">Genre</th>
+                    <th scope="col">Book Location</th>
+                    <th scope="col">Status</th>
                 </tr>
             </thead>
             <tbody>
+                {% for book in books %}
                 <tr>
-                    <td scope="col">
-                        Something
-                    </td>
-                    <td scope="col">
-                        Something
-                    </td>
-                    <td scope="col">
-                        Something
-                    </td>
-                    <td scope="col">
-                        Something
-                    </td>
-                    <td scope="col">
-                        Something
+                    <th>{{ forloop.counter }}</th>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.isbn }}</td>
+                    <td>{{ book.publisher }}</td>
+                    <td>{{ book.genre }}</td>
+                    <td>{{ book.book_location }}</td>
+                    <td>
+                        {% if book.status_borrowed == True %}
+                        <span class="text-secondary">
+                            Borrowed
+                        </span>
+                        {% else %}
+                        <span class="text-success">
+                            Available
+                        </span>
+                        {% endif %}
                     </td>
                 </tr>
+                {% empty %}
                 <tr>
-                    <td colspan="5" style="text-align: center;">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="display: flex; justify-content: center; align-items: center;">
                         No Results Found
                     </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
+<script>
+    document.getElementsByTagName('title')[0].innerText = 'Library Search';
+</script>
     
 {% endblock %}
