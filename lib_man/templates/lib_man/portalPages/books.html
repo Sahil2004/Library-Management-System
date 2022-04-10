@@ -224,6 +224,7 @@
     </div>
 </table>
 <script>
+    document.getElementsByTagName('title')[0].innerText = 'Books';
     const editBookHandler = (rowNum, id) => {
         document.getElementById('primaryKeyEdit').defaultValue = id
         document.getElementById('titleEdit').defaultValue = document.getElementById('title'+rowNum).innerHTML

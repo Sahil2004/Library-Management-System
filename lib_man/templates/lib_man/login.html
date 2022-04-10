@@ -23,5 +23,10 @@
             <div class="col-sm"></div>
         </div>
     </div>
+    {% if login_error %}
+        <script>
+            alert('Invalid username or password.')
+        </script>
+    {% endif %}
 
 {% endblock %}
